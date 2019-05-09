@@ -35,9 +35,9 @@ export default {
   'form.publicUsers.option.B': '同事乙',
   'form.publicUsers.option.C': '同事丙',
 
+  'app.forms.student.description':
+    '学员可在此进行加入驾校，以及报考科目一，科目二，科目三，科目四等操作',
 
-  'app.forms.student.description': '学员可在此进行加入驾校，以及报考科目一，科目二，科目三，科目四等操作',
-  
   'app.forms.student.title': '学员个人信息管理',
   'form.student.choiceCampus': '校区名称',
   'validation.campus.required': '校区名称',
@@ -50,8 +50,9 @@ export default {
   'form.student.placeholder.examTime': '请选择考试时间',
   'form.student.phone.label': '电话号码',
   'form.student.phone.placeholder': '请输入电话号码',
+  'form.student.idcard.label': '身份证',
+  'form.student.idcard.placeholder': '请输入身份证',
 
-  
   'form.find': '查找',
   'app.forms.student.title': '学员考试信息查询',
   'form.student.searchExam': '考试名称',

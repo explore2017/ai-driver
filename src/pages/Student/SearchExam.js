@@ -81,15 +81,22 @@ class SearchExam extends PureComponent {
                 ],
               })(
                 // <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />
-                <Select defaultValue="2" style={{ width: 120 }}>
-                  <Option value="1" disabled>科目一</Option>
+                <Select style={{ width: 120 }}>
+                  <Option value="1" disabled>
+                    科目一
+                  </Option>
                   <Option value="2">科目二</Option>
                   <Option value="3">科目三</Option>
-                  <Option value="4" disabled>科目四</Option>
+                  <Option value="4" disabled>
+                    科目四
+                  </Option>
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.studentName" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.studentName" />}
+            >
               {getFieldDecorator('name', {
                 rules: [
                   {
@@ -97,11 +104,12 @@ class SearchExam extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />                
-              )}
+              })(<Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.phone.label" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.phone.label" />}
+            >
               {getFieldDecorator('phone', {
                 rules: [
                   {
@@ -109,9 +117,7 @@ class SearchExam extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />
-              )}
+              })(<Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />)}
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>

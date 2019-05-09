@@ -280,9 +280,9 @@ class UpdateForm extends PureComponent {
 }
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
+@connect(({ manage, loading }) => ({
+  manage,
+  loading: loading.models.manage,
 }))
 @Form.create()
 class Exam extends PureComponent {
@@ -364,7 +364,7 @@ class Exam extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'manage/fetch',
     });
   }
 
@@ -389,7 +389,7 @@ class Exam extends PureComponent {
     }
 
     dispatch({
-      type: 'rule/fetch',
+      type: 'manage/fetch',
       payload: params,
     });
   };
@@ -405,7 +405,7 @@ class Exam extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
+      type: 'manage/fetch',
       payload: {},
     });
   };
@@ -425,7 +425,7 @@ class Exam extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'rule/remove',
+          type: 'manage/remove',
           payload: {
             key: selectedRows.map(row => row.key),
           },
@@ -465,7 +465,7 @@ class Exam extends PureComponent {
       });
 
       dispatch({
-        type: 'rule/fetch',
+        type: 'manage/fetch',
         payload: values,
       });
     });
@@ -487,7 +487,7 @@ class Exam extends PureComponent {
   handleAdd = fields => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/add',
+      type: 'manage/add',
       payload: {
         desc: fields.desc,
       },
@@ -501,7 +501,7 @@ class Exam extends PureComponent {
     const { dispatch } = this.props;
     const { formValues } = this.state;
     dispatch({
-      type: 'rule/update',
+      type: 'manage/update',
       payload: {
         query: formValues,
         body: {
@@ -647,7 +647,7 @@ class Exam extends PureComponent {
 
   render() {
     const {
-      rule: { data },
+      manage: { data },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;

@@ -15,14 +15,16 @@ import {
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './AddExam.less';
+import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm'],
+@connect(({ student, loading }) => ({
+  student,
+  submitting: loading.effects['student/addSubjectStudent'],
 }))
 @Form.create()
 class AddExam extends PureComponent {
@@ -30,12 +32,34 @@ class AddExam extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
+      console.log('99999');
+      // console.log(this.props);
+      // console.log(this.state);
       if (!err) {
-        dispatch({
-          type: 'form/submitRegularForm',
-          payload: values,
-        });
-      }
+        // console.log("88888");
+        // dispatch({
+        //   type: 'student/addSubjectStudent',
+        //   payload: values,
+        // });
+        request('http://localhost:8080/student/addSubjectStudent', {
+          method: 'POST',
+          // headers: {
+          //    "Content-type":"application/x-www-form-urlencoded"
+          // },  
+          // body:"idcard=1&phone=2"  
+          data: {
+            phone: values.phone,
+            idcard: values.idcard,
+            position: values.position,
+            startTime: values.date,
+          },
+        }).then(function (response) {
+          console.log(response);
+          })
+          .catch(function (error) {
+          console.log(error);
+          });
+        }
     });
   };
 
@@ -71,8 +95,12 @@ class AddExam extends PureComponent {
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.choiceCampus" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.choiceCampus" />}
+            >
               {getFieldDecorator('title', {
+                initialValue: '2',
                 rules: [
                   {
                     required: true,
@@ -81,16 +109,21 @@ class AddExam extends PureComponent {
                 ],
               })(
                 // <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />
-                <Select defaultValue="2" style={{ width: 120 }}>
-                  <Option value="1" disabled>科目一</Option>
+                <Select style={{ width: 120 }}>
+                  <Option value="1" disabled>
+                    科目一
+                  </Option>
                   <Option value="2">科目二</Option>
                   <Option value="3">科目三</Option>
-                  <Option value="4" disabled>科目四</Option>
+                  <Option value="4" disabled>
+                    科目四
+                  </Option>
                 </Select>
               )}
             </FormItem>
             <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.position" />}>
               {getFieldDecorator('position', {
+                initialValue: '2',
                 rules: [
                   {
                     required: true,
@@ -99,8 +132,10 @@ class AddExam extends PureComponent {
                 ],
               })(
                 // <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />
-                <Select defaultValue="2" style={{ width: 120 }}>
-                  <Option value="1" disabled>花江</Option>
+                <Select style={{ width: 120 }}>
+                  <Option value="1" disabled>
+                    花江
+                  </Option>
                   <Option value="2">金鸡岭</Option>
                   <Option value="3">象鼻山</Option>
                 </Select>
@@ -122,10 +157,15 @@ class AddExam extends PureComponent {
                 //     formatMessage({ id: 'form.date.placeholder.end' }),
                 //   ]}
                 // />
-                <DatePicker placeholder={  formatMessage({id: 'form.student.placeholder.examTime'}) } />
+                <DatePicker
+                  placeholder={formatMessage({ id: 'form.student.placeholder.examTime' })}
+                />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.phone.label" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.phone.label" />}
+            >
               {getFieldDecorator('phone', {
                 rules: [
                   {
@@ -133,9 +173,20 @@ class AddExam extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />
-              )}
+              })(<Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />)}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.idcard.label" />}
+            >
+              {getFieldDecorator('idcard', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
+                  },
+                ],
+              })(<Input placeholder={formatMessage({ id: 'form.student.idcard.placeholder' })} />)}
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
