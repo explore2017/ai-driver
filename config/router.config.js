@@ -23,6 +23,12 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     routes: [
+      {
+        path: '/index',
+        name: '首页',
+        icon: 'home',
+        component: './Index',
+      },
       // student
       { path: '/', redirect: '/student/studentData', authority: ['admin', 'user'] },
       {
@@ -98,9 +104,9 @@ export default [
           },
         ],
       },
-      
+
       // vehicle
-      { 
+      {
         path: '/vehicle/message',
         name: 'vehicle',
         icon: 'dashboard',
