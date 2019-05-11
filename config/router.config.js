@@ -43,12 +43,12 @@ export default [
           {
             path: '/register/coach',
             name: '教练登记',
-            component: './Student/ChoiceCoach',
+            component: './Register/coach',
           },
           {
             path: '/register/source',
             name: '物资登记',
-            component: './Student/ChoiceCoach',
+            component: './Register/source',
           },
         ],
       },

@@ -4,33 +4,25 @@ import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import {
   Form,
   Input,
-  DatePicker,
   Select,
   Button,
   Card,
-  InputNumber,
-  Radio,
   Icon,
-  Tooltip,
-  message
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
 
 @connect(({ }) => ({}))
 @Form.create()
-class Student extends PureComponent {
+class Coach extends PureComponent {
 
   constructor(props) {
     super(props);
     this.state = {
-      campusList: [],
-      coachList: []
+      campusList:[]
     }
   }
 
@@ -39,13 +31,6 @@ class Student extends PureComponent {
     //   if(res.status==0){
     //     this.setState({
     //       campusList:res.data
-    //     })
-    //   }
-    // });
-    // request(api).then((res)=>{
-    //   if(res.status==0){
-    //     this.setState({
-    //       coachLis:res.data
     //     })
     //   }
     // });
@@ -98,13 +83,13 @@ class Student extends PureComponent {
     };
 
     return (
-      <PageHeaderWrapper title={'学员登记'} content={''}>
+      <PageHeaderWrapper title={'教练登记'} content={''}>
         <Card bordered={false}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{ marginTop: 8 }}>
             <FormItem
               label={'姓名'}
             >
-              {getFieldDecorator('namae', {
+              {getFieldDecorator('name', {
                 rules: [
                   {
                     required: true,
@@ -114,44 +99,16 @@ class Student extends PureComponent {
               })(<Input placeholder={'请输入姓名'} />)}
             </FormItem>
             <FormItem
-              label={'性别'}>
-              {getFieldDecorator('sex', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(
-                <Select placeholder='请选择性别'>
-                  <Option value="男">男</Option>
-                  <Option value="女">女</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              label={'身份证号'}
+              label={'工号'}
             >
-              {getFieldDecorator('idcard', {
+              {getFieldDecorator('jobNum', {
                 rules: [
                   {
                     required: true,
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Input placeholder={'请输入身份证号'} />)}
-            </FormItem>
-            <FormItem
-              label={<FormattedMessage id="form.student.phone.label" />}
-            >
-              {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />)}
+              })(<Input placeholder={'请输入工号'} />)}
             </FormItem>
             <FormItem
               label={<FormattedMessage id="form.student.choiceCampus" />}
@@ -176,25 +133,28 @@ class Student extends PureComponent {
               )}
             </FormItem>
             <FormItem
-              label={<FormattedMessage id="form.student.choiceCoach" />}
+              label={<FormattedMessage id="form.student.phone.label" />}
             >
-              {getFieldDecorator('coachId', {
+              {getFieldDecorator('phone', {
                 rules: [
                   {
-                    required: false
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Select placeholder='请选择教练'>
+              })(<Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />)}
+            </FormItem>
+            <FormItem
+              label={'邮箱'}
+            >
+              {getFieldDecorator('email', {
+                rules: [
                   {
-                    this.state.coachList.map((item) => {
-                      return (
-                        <Option value={item.id} key={item.id}>{item.name}</Option>
-                      )
-                    })
-                  }
-                </Select>
-              )}
+                    required: false,
+                    message: formatMessage({ id: 'validation.title.required' }),
+                  },
+                ],
+              })(<Input placeholder={'请输入邮箱'} />)}
             </FormItem>
             <FormItem {...tailFormItemLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
@@ -208,4 +168,4 @@ class Student extends PureComponent {
   }
 }
 
-export default Student;
+export default Coach;
