@@ -13,19 +13,19 @@ export async function addSubjectStudent(params) {
 }
 
 export async function showSubjectStudent(params) {
-    // request(Url.showSubjectStudent, {
-    //   method: 'POST',
-    //   data: {
-    //     ...params,
-    //   },
-    // })
-    // .then(function(response) {
-    //   console.log(response);
-    //   return response;
-    // })
-    // .catch(function(error) {
-    //   console.log(error);
-    // });
+  // request(Url.showSubjectStudent, {
+  //   method: 'POST',
+  //   data: {
+  //     ...params,
+  //   },
+  // })
+  // .then(function(response) {
+  //   console.log(response);
+  //   return response;
+  // })
+  // .catch(function(error) {
+  //   console.log(error);
+  // });
   return request(Url.showSubjectStudent, {
     method: 'POST',
     data: {
@@ -33,8 +33,6 @@ export async function showSubjectStudent(params) {
     },
   });
 }
-
-
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
