@@ -1,5 +1,40 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
+import * as Url from '@/locales/zh-CN/driveUrl';
+
+export async function addSubjectStudent(params) {
+  return request(Url.addSubjectStudent, {
+    method: 'POST',
+    data: {
+      ...params,
+      method: 'post',
+    },
+  });
+}
+
+export async function showSubjectStudent(params) {
+    // request(Url.showSubjectStudent, {
+    //   method: 'POST',
+    //   data: {
+    //     ...params,
+    //   },
+    // })
+    // .then(function(response) {
+    //   console.log(response);
+    //   return response;
+    // })
+    // .catch(function(error) {
+    //   console.log(error);
+    // });
+  return request(Url.showSubjectStudent, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');

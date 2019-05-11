@@ -71,7 +71,10 @@ class StudentData extends PureComponent {
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.choiceCampus" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.choiceCampus" />}
+            >
               {getFieldDecorator('campus', {
                 rules: [
                   {
@@ -81,15 +84,22 @@ class StudentData extends PureComponent {
                 ],
               })(
                 // <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />
-                <Select defaultValue="2" style={{ width: 120 }}>
-                  <Option value="1" disabled>科目一</Option>
+                <Select style={{ width: 120 }}>
+                  <Option value="1" disabled>
+                    科目一
+                  </Option>
                   <Option value="2">科目二</Option>
                   <Option value="3">科目三</Option>
-                  <Option value="4" disabled>科目四</Option>
+                  <Option value="4" disabled>
+                    科目四
+                  </Option>
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.choiceCoach" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.choiceCoach" />}
+            >
               {getFieldDecorator('coach', {
                 rules: [
                   {
@@ -99,8 +109,10 @@ class StudentData extends PureComponent {
                 ],
               })(
                 // <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />
-                <Select defaultValue="2" style={{ width: 120 }}>
-                  <Option value="1" disabled>花江</Option>
+                <Select style={{ width: 120 }}>
+                  <Option value="1" disabled>
+                    花江
+                  </Option>
                   <Option value="2">金鸡岭</Option>
                   <Option value="3">象鼻山</Option>
                 </Select>
@@ -116,12 +128,17 @@ class StudentData extends PureComponent {
                 ],
               })(
                 // <Input placeholder={formatMessage({ id: 'form.student.placeholder' })} />
-                <Select defaultValue="1" style={{ width: 120 }}>
-                  <Option value="1" disabled>1000</Option>
+                <Select style={{ width: 120 }}>
+                  <Option value="1" disabled>
+                    1000
+                  </Option>
                 </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.student.phone.label" />}>
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="form.student.phone.label" />}
+            >
               {getFieldDecorator('phone', {
                 rules: [
                   {
@@ -129,9 +146,7 @@ class StudentData extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />
-              )}
+              })(<Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />)}
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>

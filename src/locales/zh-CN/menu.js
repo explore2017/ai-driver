@@ -42,4 +42,32 @@ export default {
   'menu.editor.flow': '流程编辑器',
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
+
+  'menu.student': '学员',
+  'menu.student.data': '个人信息',
+  'menu.student.choiceCoach': '选择教练',
+  'menu.student.addExam': '报名考试',
+  'menu.student.searchExam': '查看考试',
+
+  'menu.coach': '教练',
+  'menu.coach.data': '教练信息',
+  'menu.coach.student': '学员信息',
+
+  'menu.manage': '驾校管理',
+  'menu.manage.student': '学员管理',
+  'menu.manage.coach': '教练管理',
+  'menu.manage.source': '资源管理',
+  // 'menu.manage.staff': '员工管理',
+  'menu.manage.campus': '校区管理',
+  'menu.manage.exam': '考试管理',
+  'menu.manage.vehicle': '车辆管理',
+
+  'menu.vehicle': '车辆使用查询',
+
+  'menu.news': '驾校信息',
+  'menu.news.student': '驾校招生信息',
+  'menu.news.manage': '驾校管理制度',
+  'menu.news.source': '驾校资源配置',
+  'menu.news.person': '驾校人员配置',
+  // 'menu.news.exam': '驾校考试信息展示',
 };
