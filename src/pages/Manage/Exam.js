@@ -281,9 +281,15 @@ class UpdateForm extends PureComponent {
 }
 
 /* eslint react/no-multi-comp:0 */
+<<<<<<< HEAD
 @connect(({ exam, loading }) => ({
   exam,
   loading: loading.models.exam,
+=======
+@connect(({ manage, loading }) => ({
+  manage,
+  loading: loading.models.manage,
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
 }))
 @Form.create()
 class Exam extends PureComponent {
@@ -370,7 +376,11 @@ class Exam extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
+<<<<<<< HEAD
       type: 'exam/showSubjectStudent',
+=======
+      type: 'manage/fetch',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
     });
   }
 
@@ -395,7 +405,11 @@ class Exam extends PureComponent {
     }
 
     dispatch({
+<<<<<<< HEAD
       type: 'exam/showSubjectStudent',
+=======
+      type: 'manage/fetch',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
       payload: params,
     });
   };
@@ -411,7 +425,11 @@ class Exam extends PureComponent {
       formValues: {},
     });
     dispatch({
+<<<<<<< HEAD
       type: 'exam/showSubjectStudent',
+=======
+      type: 'manage/fetch',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
       payload: {},
     });
   };
@@ -431,7 +449,11 @@ class Exam extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
+<<<<<<< HEAD
           type: 'exam/remove',
+=======
+          type: 'manage/remove',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
           payload: {
             key: selectedRows.map(row => row.key),
           },
@@ -471,7 +493,11 @@ class Exam extends PureComponent {
       });
 
       dispatch({
+<<<<<<< HEAD
         type: 'exam/showSubjectStudent',
+=======
+        type: 'manage/fetch',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
         payload: values,
       });
     });
@@ -493,7 +519,11 @@ class Exam extends PureComponent {
   handleAdd = fields => {
     const { dispatch } = this.props;
     dispatch({
+<<<<<<< HEAD
       type: 'exam/add',
+=======
+      type: 'manage/add',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
       payload: {
         desc: fields.desc,
       },
@@ -507,7 +537,11 @@ class Exam extends PureComponent {
     const { dispatch } = this.props;
     const { formValues } = this.state;
     dispatch({
+<<<<<<< HEAD
       type: 'exam/update',
+=======
+      type: 'manage/update',
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
       payload: {
         query: formValues,
         body: {
@@ -653,7 +687,11 @@ class Exam extends PureComponent {
 
   render() {
     const {
+<<<<<<< HEAD
       exam: { data },
+=======
+      manage: { data },
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
       loading,
     } = this.props;
 

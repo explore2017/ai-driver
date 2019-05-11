@@ -1,56 +1,39 @@
-import React, { Component } from 'react';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import { Card, Table, message, Divider, Popconfirm, Button, Modal, Form, Input, Select } from 'antd';
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
+import {
+  Form,
+  Input,
+  Select,
+  Button,
+  Card,
+  Icon,
+} from 'antd';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
-import { Link } from 'react-router-dom';
+
 const FormItem = Form.Item;
 const { Option } = Select;
 
+@connect(({ }) => ({}))
 @Form.create()
-export default class Coach extends Component {
+class Coach extends PureComponent {
+
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
-      campusList: [],
-      visible: false
-    };
+      campusList:[]
+    }
   }
 
   componentDidMount() {
-    this.initialList();
-  }
-
-  initialList() {
-    // request("api").then((res)=>{
-    // 	if(res.status===0){
-    // 		this.setState({
-    // 			list:res.data
-    // 		})
-    // 	}
+    // request(api).then((res)=>{
+    //   if(res.status==0){
+    //     this.setState({
+    //       campusList:res.data
+    //     })
+    //   }
     // });
-  }
-
-  handleDelete(record) {
-    //record.id
-    request(api).then((res) => {
-      message.info(res.msg);
-    });
-    initialList();
-  }
-
-  handleEdit(record) {
-    this.setState({
-      visible: true
-    })
-    this.props.form.setFieldsValue({
-      name: record.name,
-      jobNum: record.jobNum,
-      phone: record.phone,
-      email: record.email,
-      campusId: record.campusId,
-    });
   }
 
   handleSubmit = e => {
@@ -58,30 +41,20 @@ export default class Coach extends Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        //TODO
         request(api,{
-          method:'PUT',
+          method:'POST',
           body:values
         }).then((res)=>{
           message.info(res.msg);
         }).catch(()=>{
-          message.error('编辑失败');
+          message.error('登记失败');
         })
-        this.handleModalVisible();
-        initialList();
       }
     });
   };
 
-  handleModalVisible() {
-    this.setState({
-      visible: false
-    })
-    this.props.form.resetFields();
-  }
-
   render() {
-
+    const { submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -96,89 +69,23 @@ export default class Coach extends Component {
         sm: { span: 8 },
       },
     };
-
-
-    const source = [
-      {
-        id: 1,
-        name: 'name',
-        jobNum: 'jobNum',
-        campusId: 'compusId',
-      },
-    ];
-
-    const columns = [
-      {
-        title: '序号',
-        dataIndex: 'index',
-        key: 'index',
-        render: (text, record, index) => `${index + 1}`,
-      },
-      {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '工号',
-        dataIndex: 'jobNum',
-        key: 'jobNum',
-      },
-      {
-        title: '校区',
-        dataIndex: 'campusId',
-        key: 'campusId',
-      },
-      {
-        title: '电话',
-        dataIndex: 'phone',
-        key: 'phone',
-      },
-      {
-        title: '邮箱',
-        dataIndex: 'email',
-        key: 'email',
-      },
-      {
-        title: '操作',
-        key: 'operator',
-        render: record => {
-          return (
-            <span>
-              <a onClick={() => this.handleEdit(record)}>编辑</a>
-              <Divider type="vertical" />
-              <Popconfirm
-                title="你确认删除吗?"
-                onConfirm={() => this.handleDelete(record)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <a style={{ color: 'red' }}>删除</a>
-              </Popconfirm>
-            </span>
-          );
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
         },
       },
-    ];
+    };
 
     return (
-      <PageHeaderWrapper>
-        <Card>
-          <Link to="/register/coach">
-            <Button type="primary" style={{ marginBottom: 20 }}>
-              登记
-            </Button>
-          </Link>
-          <Table dataSource={source} columns={columns} />
-        </Card>
-        <Modal
-          title={'编辑'}
-          visible={this.state.visible}
-          onCancel={() => this.handleModalVisible()}
-          footer={null}
-        >
-          <Form
-            onSubmit={this.handleSubmit}>
+      <PageHeaderWrapper title={'教练登记'} content={''}>
+        <Card bordered={false}>
+          <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{ marginTop: 8 }}>
             <FormItem
               label={'姓名'}
             >
@@ -249,14 +156,16 @@ export default class Coach extends Component {
                 ],
               })(<Input placeholder={'请输入邮箱'} />)}
             </FormItem>
-            <FormItem style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit" >
+            <FormItem {...tailFormItemLayout} style={{ marginTop: 32 }}>
+              <Button type="primary" htmlType="submit" loading={submitting}>
                 <FormattedMessage id="form.submit" />
               </Button>
             </FormItem>
           </Form>
-        </Modal>
+        </Card>
       </PageHeaderWrapper>
     );
   }
 }
+
+export default Coach;

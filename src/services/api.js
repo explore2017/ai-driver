@@ -11,6 +11,7 @@ export async function addSubjectStudent(params) {
     },
   });
 }
+<<<<<<< HEAD
 
 export async function showSubjectStudent(params) {
   // request(Url.showSubjectStudent, {
@@ -33,6 +34,8 @@ export async function showSubjectStudent(params) {
     },
   });
 }
+=======
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');

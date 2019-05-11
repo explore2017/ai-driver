@@ -45,14 +45,20 @@ class AddExam extends PureComponent {
           method: 'POST',
           // headers: {
           //    "Content-type":"application/x-www-form-urlencoded"
+<<<<<<< HEAD
           // },
           // body:"idcard=1&phone=2"
+=======
+          // },  
+          // body:"idcard=1&phone=2"  
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
           data: {
             phone: values.phone,
             idcard: values.idcard,
             position: values.position,
             startTime: values.date,
           },
+<<<<<<< HEAD
         })
           .then(function(response) {
             console.log(response);
@@ -61,6 +67,15 @@ class AddExam extends PureComponent {
             console.log(error);
           });
       }
+=======
+        }).then(function (response) {
+          console.log(response);
+          })
+          .catch(function (error) {
+          console.log(error);
+          });
+        }
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
     });
   };
 

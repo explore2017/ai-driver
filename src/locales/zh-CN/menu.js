@@ -48,7 +48,11 @@ export default {
   'menu.student.choiceCoach': '选择教练',
   'menu.student.addExam': '报名考试',
   'menu.student.searchExam': '查看考试',
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
   'menu.coach': '教练',
   'menu.coach.data': '教练信息',
   'menu.coach.student': '学员信息',
@@ -61,9 +65,15 @@ export default {
   'menu.manage.campus': '校区管理',
   'menu.manage.exam': '考试管理',
   'menu.manage.vehicle': '车辆管理',
+<<<<<<< HEAD
 
   'menu.vehicle': '车辆使用查询',
 
+=======
+  
+  'menu.vehicle': '车辆使用查询',
+  
+>>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
   'menu.news': '驾校信息',
   'menu.news.student': '驾校招生信息',
   'menu.news.manage': '驾校管理制度',
