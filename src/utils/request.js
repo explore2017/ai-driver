@@ -43,10 +43,12 @@ const errorHandler = error => {
     });
     return;
   }
+
   notification.error({
     message: `请求错误 ${status}: ${url}`,
     description: errortext,
   });
+
   // environment should not be used
   if (status === 403) {
     router.push('/exception/403');

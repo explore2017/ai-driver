@@ -5,20 +5,9 @@ import moment from 'moment';
 import {
   Form,
   Input,
-  DatePicker,
-  Select,
   Button,
   Card,
-  InputNumber,
-  Radio,
-  Modal,
   Icon,
-  Tooltip,
-  Table,
-  Divider,
-  Popconfirm,
-  Row,
-  Col,
   message,
   notification
 } from 'antd';
@@ -45,10 +34,10 @@ class Password extends PureComponent {
           });
           return;
         }
-        const api = 'http://localhost:8080/client/changePwd';
+        const api = 'http://localhost:8080/student/password';
         request(api,{
-          method: 'POST', 
-          body:{
+          method: 'PUT', 
+          data:{
             ...values
           }
         }).then((res)=>{
@@ -60,12 +49,7 @@ class Password extends PureComponent {
               message: res.msg,
             })
           }
-        }).catch((res)=>{
-          notification.error({
-            message: '请求错误',
-            description: '请稍后重试或联系管理员！',
-          })
-        })
+        }).catch(()=>{})
       }
     });
   };

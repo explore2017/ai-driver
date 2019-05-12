@@ -36,8 +36,9 @@ export default class Coach extends Component {
     //record.id
     request(api).then((res) => {
       message.info(res.msg);
+      initialList();
     });
-    initialList();
+    
   }
 
   handleEdit(record) {

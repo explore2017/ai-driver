@@ -5,20 +5,10 @@ import moment from 'moment';
 import {
   Form,
   Input,
-  DatePicker,
   Select,
   Button,
   Card,
-  InputNumber,
-  Radio,
-  Modal,
   Icon,
-  Tooltip,
-  Table,
-  Divider,
-  Popconfirm,
-  Row,
-  Col,
   message,
   notification
 } from 'antd';
@@ -32,7 +22,11 @@ class Info extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {
+        name: '',
+        sex: '',
+        phone:''
+      }
     }
   }
 
@@ -46,9 +40,7 @@ class Info extends PureComponent {
       this.setState({
         user: res.entity
       })
-    }).catch(() => {
-      message.error('请求失败');
-    })
+    }).catch(() => { })
   }
 
   handleSubmit = e => {
@@ -56,27 +48,22 @@ class Info extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const api = 'http://localhost:8080/student/changeInfo';
+        const api = 'http://localhost:8080/student/info';
         request(api, {
-          method: 'POST',
-          body: {
+          method: 'PUT',
+          data: {
             ...values
           }
         }).then((res) => {
           if (res.status == 0) {
             message.success(res.msg);
-            form.resetFields();
+            this.initialValue();
           } else {
             notification.warning({
               message: res.msg,
             })
           }
-        }).catch((res) => {
-          notification.error({
-            message: '请求错误',
-            description: '请稍后重试或联系管理员！',
-          })
-        })
+        }).catch(() => { })
       }
     });
   };
@@ -132,7 +119,7 @@ class Info extends PureComponent {
               {...formItemLayout}
               label={'驾校校区'}
             >
-              <span>{user.campus_id}</span>
+              <span>{user.campusId}</span>
             </FormItem>
             <FormItem
               {...formItemLayout}

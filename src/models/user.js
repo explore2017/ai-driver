@@ -1,4 +1,5 @@
 import { query as queryUsers, queryCurrent } from '@/services/user';
+import { router } from 'umi';
 
 export default {
   namespace: 'user',
@@ -18,6 +19,10 @@ export default {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
+      //跳转
+      if(response==undefined){
+        router.push("/user/login");
+      }
       yield put({
         type: 'saveCurrentUser',
         payload: response,

@@ -24,7 +24,7 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       // student
-      { path: '/', redirect: '/index', authority: ['admin', 'user'] },
+      { path: '/', redirect: '/index', authority: ['admin', 'student'] },
       {
         path: '/index',
         name: '首页',

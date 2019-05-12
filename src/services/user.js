@@ -7,6 +7,6 @@ export async function query() {
 
 //获取当前用户
 export async function queryCurrent() {
-  return request('/api/currentUser');
-  //return request(Url.fetchCurrent);
+  //return request('/api/currentUser');
+  return request(Url.fetchCurrent);
 }

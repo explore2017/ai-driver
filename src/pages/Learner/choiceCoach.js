@@ -27,7 +27,7 @@ class ChoiceCoach extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      coachList: ['1','2','3']
+      coachList: []
     }
   }
 
@@ -36,7 +36,7 @@ class ChoiceCoach extends PureComponent {
   }
 
   initialValue() {
-    const api = "http://localhost:8080/coach";
+    const api = "http://localhost:8080/manage/Coaches";
     request(api).then((res) => {
       this.setState({
         coachList: res.data
@@ -48,6 +48,7 @@ class ChoiceCoach extends PureComponent {
 
   handleSelect = record =>{
     // record.id 
+    console.log(record.coach.id)
     request('api').then((res)=>{
       message.info(res.msg);
     }).catch(()=>{})
@@ -67,8 +68,8 @@ class ChoiceCoach extends PureComponent {
             <Skeleton avatar title={false} loading={false} active>
               <List.Item.Meta
                 avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                title={<a href="#">{'coach.name'}</a>}
-                description="coach describe or more"
+                title={<a href="#">{item.coach.name}</a>}
+                description={'工号:'+ item.coach.jobNum +' 电话:'+ item.coach.phone}
               />
             </Skeleton>
           </List.Item>
