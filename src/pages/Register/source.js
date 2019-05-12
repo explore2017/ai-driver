@@ -47,7 +47,12 @@ class Coach extends PureComponent {
           method: 'POST',
           body: values
         }).then((res) => {
-          message.info(res.msg);
+          if(res.status=='0'){
+            message.success(res.msg);
+            this.props.form.resetFields();
+          }else{
+            message.error(res.msg);
+          }
         }).catch(() => {
           message.error('登记失败');
         })
@@ -146,7 +151,7 @@ class Coach extends PureComponent {
                 ],
               })(<Input placeholder={'请输入价格'} />)}
             </FormItem>
-          
+
             <FormItem
               label={'当前状态'}
             >
