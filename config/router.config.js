@@ -52,6 +52,11 @@ export default [
             name: '物资登记',
             component: './Register/source',
           },
+          {
+            path: '/register/vehicle',
+            name: '车辆登记',
+            component: './Register/vehicle',
+          },
         ],
       },
       {
