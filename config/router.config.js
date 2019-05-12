@@ -168,11 +168,46 @@ export default [
       // vehicle
       {
         path: '/vehicle/message',
-        name: 'vehicle',
+        name: '',
         icon: 'dashboard',
         component: './Student/ChoiceCoach',
       },
-
+      //----------------------------------学员菜单开始-----------------------------------
+      {
+        path: '/split',
+        name: '---------',
+        icon: 'dashboard',
+      },
+      {
+        path: '/learner/choiceCoach',
+        name: '选择教练',
+        icon: 'dashboard',
+        component: './Learner/choiceCoach',
+      },
+      {
+        path: '/learner/sign',
+        name: '报名考试',
+        icon: 'dashboard',
+        component: './Learner/sign',
+      },
+      {
+        path: '/learner/exam',
+        name: '我的考试',
+        icon: 'dashboard',
+        component: './Learner/exam',
+      },
+      {
+        path: '/learner/info',
+        name: '个人信息',
+        icon: 'dashboard',
+        component: './Learner/info',
+      },
+      {
+        path: '/learner/password',
+        name: '修改密码',
+        icon: 'dashboard',
+        component: './Learner/password',
+      },
       // dashboard
       // { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
       // {
