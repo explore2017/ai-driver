@@ -14,31 +14,13 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 }))
 class LoginPage extends Component {
   state = {
-    type: 'account',
+    type: 'admin',
     autoLogin: true,
   };
 
   onTabChange = type => {
     this.setState({ type });
   };
-
-  onGetCaptcha = () =>
-    new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
-          })
-            .then(resolve)
-            .catch(reject);
-          message.warning(formatMessage({ id: 'app.login.verification-code-warning' }));
-        }
-      });
-    });
 
   handleSubmit = (err, values) => {
     const { type } = this.state;
@@ -77,14 +59,14 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>
+          <Tab key="admin" tab={'管理登录'}>
             {login.status === 'error' &&
-              login.type === 'account' &&
+              login.type === 'admin' &&
               !submitting &&
               this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
             <UserName
               name="userName"
-              placeholder={`${formatMessage({ id: 'app.login.userName' })}: admin or user`}
+              placeholder={'请输入用户名'}
               rules={[
                 {
                   required: true,
@@ -94,7 +76,7 @@ class LoginPage extends Component {
             />
             <Password
               name="password"
-              placeholder={`${formatMessage({ id: 'app.login.password' })}: ant.design`}
+              placeholder={'请输入密码'}
               rules={[
                 {
                   required: true,
@@ -107,40 +89,34 @@ class LoginPage extends Component {
               }}
             />
           </Tab>
-          <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
+          <Tab key="student" tab={'学员登录'}>
             {login.status === 'error' &&
-              login.type === 'mobile' &&
+              login.type === 'student' &&
               !submitting &&
-              this.renderMessage(
-                formatMessage({ id: 'app.login.message-invalid-verification-code' })
-              )}
-            <Mobile
-              name="mobile"
-              placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
+              this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
+            <UserName
+              name="userName"
+              placeholder={'请输入身份证号码'}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.phone-number.required' }),
-                },
-                {
-                  pattern: /^1\d{10}$/,
-                  message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
+                  message: formatMessage({ id: 'validation.userName.required' }),
                 },
               ]}
             />
-            <Captcha
-              name="captcha"
-              placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
-              countDown={120}
-              onGetCaptcha={this.onGetCaptcha}
-              getCaptchaButtonText={formatMessage({ id: 'form.get-captcha' })}
-              getCaptchaSecondText={formatMessage({ id: 'form.captcha.second' })}
+            <Password
+              name="password"
+              placeholder={'请输入密码'}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.verification-code.required' }),
+                  message: formatMessage({ id: 'validation.password.required' }),
                 },
               ]}
+              onPressEnter={e => {
+                e.preventDefault();
+                this.loginForm.validateFields(this.handleSubmit);
+              }}
             />
           </Tab>
           {/* <div>

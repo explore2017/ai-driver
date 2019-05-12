@@ -179,6 +179,12 @@ export default [
         icon: 'dashboard',
       },
       {
+        path: '/learner/news',
+        name: '驾校新闻',
+        icon: 'dashboard',
+        component: './Index/news',
+      },
+      {
         path: '/learner/choiceCoach',
         name: '选择教练',
         icon: 'dashboard',

@@ -49,6 +49,7 @@ class BasicLayout extends React.Component {
       dispatch,
       route: { routes, path, authority },
     } = this.props;
+    //获取当前用户
     dispatch({
       type: 'user/fetchCurrent',
     });

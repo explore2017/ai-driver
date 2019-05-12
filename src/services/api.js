@@ -2,6 +2,22 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 import * as Url from '@/locales/zh-CN/driveUrl';
 
+
+//通用登录
+export async function commonLogin(params) {
+  let api;
+  if (params.type=='admin'){
+    api = Url.adminLogin
+  }else if(params.type=='student'){
+    api = Url.studentLogin
+  }
+  return request(api, {
+    method: 'POST',
+    data: params,
+  });
+}
+
+
 export async function addSubjectStudent(params) {
   return request(Url.addSubjectStudent, {
     method: 'POST',
