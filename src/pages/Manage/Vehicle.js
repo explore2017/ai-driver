@@ -27,9 +27,8 @@ class Vehicle extends Component {
     this.state = {
       list: [],
       campusList: [],
-      coachList:[],
+      coachList: [],
       visible: false,
-
     };
   }
 
@@ -38,26 +37,41 @@ class Vehicle extends Component {
   }
 
   initialList() {
-    //  request("api").then((res)=>{
-    // 	if(res.status===0){
-    // 		this.setState({
-    // 			list:res.data
-    // 		})
-    // 	}
-    // });
+    request('http://localhost:8080/vehicle/showVehicles').then(res => {
+      if (res.status === 0) {
+        this.setState({
+          list: res.data,
+        });
+      }
+    });
+    let api = 'http://localhost:8080/manage/showAllCampus';
+    request(api).then(res => {
+      if (res.status == 0) {
+        this.setState({
+          campusList: res.data,
+        });
+      }
+    });
+    request('http://localhost:8080/manage/Coaches').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          coachList: res.data,
+        });
+      }
+    });
   }
 
   handleDelete(record) {
     // record.id
-    request(api).then(res => {
-      if(res.status=='0'){
+    let api = 'http://localhost:8080/vehicle/deleteVehicle/' + record.vehicle.id;
+    request(api, { method: 'delete' }).then(res => {
+      if (res.status == '0') {
         message.success(res.msg);
-      }else{
+        this.initialList();
+      } else {
         message.error(res.msg);
-        initialList();
       }
     });
-
   }
 
   handleEdit(record) {
@@ -65,11 +79,12 @@ class Vehicle extends Component {
       visible: true,
     });
     this.props.form.setFieldsValue({
+      id: record.id,
       name: record.name,
-      purchaseTime: record.purchaseTime,
+      purchaseTime: record.purchaseTime.format('YYYY-MM-DD '),
       status: record.status,
-      coach: record.coachId,
-      campusId: record.campusId,
+      coachId: record.coachId,
+      campusId: record.compusId,
     });
   }
 
@@ -79,22 +94,23 @@ class Vehicle extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         // TODO
+        let api = 'http://localhost:8080/vehicle/reviseVehicle';
         request(api, {
           method: 'PUT',
-          body: values,
+          data: values,
         })
           .then(res => {
-            if(res.status=='0'){
+            if (res.status == '0') {
               message.success(res.msg);
-            }else{
+              this.handleModalVisible();
+              this.initialList();
+            } else {
               message.error(res.msg);
             }
           })
           .catch(() => {
             message.error('编辑失败');
           });
-        this.handleModalVisible();
-        initialList();
       }
     });
   };
@@ -122,16 +138,6 @@ class Vehicle extends Component {
       },
     };
 
-    const source = [
-      {
-        id: 1,
-        name: 'name',
-        jobNum: 'jobNum',
-        campusId: 'compusId',
-        status: 0,
-      },
-    ];
-
     const columns = [
       {
         title: '序号',
@@ -141,22 +147,22 @@ class Vehicle extends Component {
       },
       {
         title: '车牌号',
-        dataIndex: 'name',
+        dataIndex: 'vehicle.name',
         key: 'name',
       },
       {
         title: '所属教练',
-        dataIndex: 'coachId',
-        key: 'coachId',
+        dataIndex: 'coachName',
+        key: 'coachName',
       },
       {
         title: '所属校区',
-        dataIndex: 'campusId',
-        key: 'campusId',
+        dataIndex: 'campusName',
+        key: 'campusName',
       },
       {
         title: '车辆状态',
-        dataIndex: 'status',
+        dataIndex: 'vehicle.status',
         key: 'status',
         render: text => {
           if (text == 0) {
@@ -172,7 +178,7 @@ class Vehicle extends Component {
       },
       {
         title: '购买时间',
-        dataIndex: 'purchaseTime',
+        dataIndex: 'vehicle.purchaseTime',
         key: 'purchaseTime',
       },
       {
@@ -181,7 +187,7 @@ class Vehicle extends Component {
         render: record => {
           return (
             <span>
-              <a onClick={() => this.handleEdit(record)}>编辑</a>
+              <a onClick={() => this.handleEdit(record.vehicle)}>编辑</a>
               <Divider type="vertical" />
               <Popconfirm
                 title="你确认删除吗?"
@@ -205,7 +211,7 @@ class Vehicle extends Component {
               车辆登记
             </Button>
           </Link>
-          <Table dataSource={source} columns={columns} />
+          <Table dataSource={this.state.list} columns={columns} />
         </Card>
         <Modal
           title={'编辑'}
@@ -214,6 +220,7 @@ class Vehicle extends Component {
           footer={null}
         >
           <Form onSubmit={this.handleSubmit}>
+            <FormItem>{getFieldDecorator('id')(<span />)}</FormItem>
             <FormItem label={'车牌号'}>
               {getFieldDecorator('name', {
                 rules: [
@@ -236,8 +243,8 @@ class Vehicle extends Component {
                 <Select placeholder="请选择教练">
                   {this.state.coachList.map(item => {
                     return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
+                      <Option value={item.coach.id} key={item.coach.id}>
+                        {item.coach.name}
                       </Option>
                     );
                   })}

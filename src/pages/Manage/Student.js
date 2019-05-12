@@ -27,7 +27,7 @@ class Student extends Component {
     this.state = {
       list: [],
       campusList: [],
-      coachList:[],
+      coachList: [],
       visible: false,
     };
   }
@@ -37,41 +37,58 @@ class Student extends Component {
   }
 
   initialList() {
-    //  request("api").then((res)=>{
-    // 	if(res.status===0){
-    // 		this.setState({
-    // 			list:res.data
-    // 		})
-    // 	}
-    // });
+    let api = 'http://localhost:8080/manage/students';
+    request(api).then(res => {
+      if (res.status === 0) {
+        this.setState({
+          list: res.data,
+        });
+      }
+    });
+    request('http://localhost:8080/manage/showAllCampus').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          campusList: res.data,
+        });
+      }
+    });
+    request('http://localhost:8080/manage/Coaches').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          coachList: res.data,
+        });
+      }
+    });
   }
 
   handleDelete(record) {
     // record.id
-    request(api).then(res => {
-      if(res.status=='0'){
+    let api = 'http://localhost:8080/manage/deleteStudent/' + record.student.id;
+    request(api, { method: 'delete' }).then(res => {
+      if (res.status == '0') {
         message.success(res.msg);
-        initialList();
-      }else{
+        this.initialList();
+      } else {
         message.error(res.msg);
       }
     });
-
   }
 
   handleEdit(record) {
     this.setState({
       visible: true,
     });
+
     this.props.form.setFieldsValue({
-      name: record.name,
-      sex: record.sex,
-      status: record.status,
-      phone: record.phone,
-      campusId: record.campusId,
-      coachId:record.coachId,
-      password:record.password,
-      idcard:record.idcard,
+      id: record.student.id,
+      name: record.student.name,
+      sex: record.student.sex,
+      status: record.student.status,
+      phone: record.student.phone,
+      campusId: record.student.campusId,
+      coachId: record.student.coachId,
+      password: record.student.password,
+      idcard: record.student.idcard,
     });
   }
 
@@ -81,22 +98,23 @@ class Student extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         // TODO
+        let api = 'http://localhost:8080/manage/reviseStudent';
         request(api, {
           method: 'PUT',
-          body: values,
+          data: values,
         })
           .then(res => {
-            if(res.status=='0'){
+            if (res.status == '0') {
               message.success(res.msg);
-            }else{
+              this.handleModalVisible();
+              this.initialList();
+            } else {
               message.error(res.msg);
             }
           })
           .catch(() => {
             message.error('编辑失败');
           });
-        this.handleModalVisible();
-        initialList();
       }
     });
   };
@@ -124,16 +142,6 @@ class Student extends Component {
       },
     };
 
-    const source = [
-      {
-        id: 1,
-        name: 'name',
-        jobNum: 'jobNum',
-        campusId: 'compusId',
-        status: 0,
-      },
-    ];
-
     const columns = [
       {
         title: '序号',
@@ -143,31 +151,32 @@ class Student extends Component {
       },
       {
         title: '姓名',
-        dataIndex: 'name',
+        dataIndex: 'student.name',
         key: 'name',
       },
       {
         title: '性别',
-        dataIndex: 'sex',
+        dataIndex: 'student.sex',
         key: 'sex',
-      },{
+      },
+      {
         title: '电话',
-        dataIndex: 'phone',
+        dataIndex: 'student.phone',
         key: 'phone',
       },
       {
         title: '所属教练',
-        dataIndex: 'coachId',
-        key: 'coachId',
+        dataIndex: 'coach.name',
+        key: 'coachName',
       },
       {
         title: '所属校区',
-        dataIndex: 'campusId',
-        key: 'campusId',
+        dataIndex: 'campus.name',
+        key: 'campusName',
       },
       {
         title: '学员状态',
-        dataIndex: 'status',
+        dataIndex: 'student.status',
         key: 'status',
         render: text => {
           if (text == 0) {
@@ -180,11 +189,12 @@ class Student extends Component {
       },
       {
         title: '学员密码',
-        dataIndex: 'password',
+        dataIndex: 'student.password',
         key: 'password',
-      },{
+      },
+      {
         title: '身份证号',
-        dataIndex: 'idcard',
+        dataIndex: 'student.idcard',
         key: 'idcard',
       },
       {
@@ -217,7 +227,7 @@ class Student extends Component {
               学员登记
             </Button>
           </Link>
-          <Table dataSource={source} columns={columns} />
+          <Table dataSource={this.state.list} columns={columns} />
         </Card>
         <Modal
           title={'编辑'}
@@ -226,12 +236,13 @@ class Student extends Component {
           footer={null}
         >
           <Form onSubmit={this.handleSubmit}>
+            <FormItem>{getFieldDecorator('id')(<span />)}</FormItem>
             <FormItem label={'姓名'}>
               {getFieldDecorator('name', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入学员姓名",
+                    message: '请输入学员姓名',
                   },
                 ],
               })(<Input placeholder={'请输入学员姓名'} />)}
@@ -241,15 +252,15 @@ class Student extends Component {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    message: '请选择教练',
                   },
                 ],
               })(
                 <Select placeholder="请选择教练">
                   {this.state.coachList.map(item => {
                     return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
+                      <Option value={item.coach.id} key={item.coach.id}>
+                        {item.coach.name}
                       </Option>
                     );
                   })}
@@ -261,7 +272,7 @@ class Student extends Component {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    message: '请选择校区',
                   },
                 ],
               })(
@@ -281,7 +292,6 @@ class Student extends Component {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
               })(
@@ -296,10 +306,10 @@ class Student extends Component {
                 rules: [
                   {
                     required: false,
-                    message:"请输入电话号码",
+                    message: '请输入电话号码',
                   },
                 ],
-              })(<DatePicker />)}
+              })(<Input />)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit">

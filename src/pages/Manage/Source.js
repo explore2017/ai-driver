@@ -13,6 +13,7 @@ import {
   Select,
   DatePicker,
   Tag,
+  InputNumber,
 } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import request from '@/utils/request';
@@ -27,7 +28,7 @@ class Source extends Component {
     this.state = {
       list: [],
       campusList: [],
-      coachList:[],
+      coachList: [],
       visible: false,
       visibleAddModal: false,
     };
@@ -39,35 +40,36 @@ class Source extends Component {
 
   initialList() {
     //获取校区
-     request("http://localhost:8080/manage/showAllCampus").then((res)=>{
-    	if(res.status==0){
-    		this.setState({
-    			campusList:res.data
-    		})
-    	}
+    request('http://localhost:8080/manage/showAllCampus').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          campusList: res.data,
+        });
+      }
     });
     //获取资源
-    request("http://localhost:8080/source/showSources").then((res)=>{
-    	if(res.status==0){
-    		this.setState({
-    			list:res.data
-        })
-        console.log(res.data)
-    	}
+    request('http://localhost:8080/source/showSources').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          list: res.data,
+        });
+      }
     });
   }
 
   handleDelete(record) {
     // record.id
-    request(api).then(res => {
-      if(res.status=='0'){
-        initialList();
+    let api = 'http://localhost:8080/source/deleteSource/' + record.source.id;
+    request(api, {
+      method: 'delete',
+    }).then(res => {
+      if (res.status == '0') {
+        this.initialList();
         message.success(res.msg);
-      }else{
+      } else {
         message.error(res.msg);
       }
     });
-
   }
 
   handleEdit(record) {
@@ -75,12 +77,13 @@ class Source extends Component {
       visible: true,
     });
     this.props.form.setFieldsValue({
+      id: record.source.id,
       sourceName: record.source.sourceName,
-      campusId: record.campus.id,
+      campusId: record.source.campusId,
       status: record.source.status,
       sourcePosition: record.source.sourcePosition,
-      sourceValue:record.source.sourceValue,
-      total:record.source.total,
+      sourceValue: record.source.sourceValue,
+      total: record.source.total,
     });
   }
 
@@ -90,22 +93,23 @@ class Source extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         // TODO
+        let api = 'http://localhost:8080/source/reviseSource';
         request(api, {
           method: 'PUT',
-          body: values,
+          data: values,
         })
           .then(res => {
-            if(res.status=='0'){
+            if (res.status == '0') {
               message.success(res.msg);
-            }else{
+              this.handleModalVisible();
+              this.initialList();
+            } else {
               message.error(res.msg);
             }
           })
           .catch(() => {
             message.error('编辑失败');
           });
-        this.handleModalVisible();
-        initialList();
       }
     });
   };
@@ -134,8 +138,6 @@ class Source extends Component {
       },
     };
 
-
-
     const columns = [
       {
         title: '序号',
@@ -152,13 +154,14 @@ class Source extends Component {
         title: '所属校区',
         dataIndex: 'campus.name',
         key: 'campusName',
-      },{
+      },
+      {
         title: '资源位置',
         dataIndex: 'source.sourcePosition',
         key: 'position',
       },
       {
-        title: '资源价值',
+        title: '单价',
         dataIndex: 'source.sourceValue',
         key: 'value',
       },
@@ -219,12 +222,13 @@ class Source extends Component {
           footer={null}
         >
           <Form onSubmit={this.handleSubmit}>
+            <FormItem>{getFieldDecorator('id')(<span />)}</FormItem>
             <FormItem label={'资源名称'}>
               {getFieldDecorator('sourceName', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入资源名称",
+                    message: '请输入资源名称',
                   },
                 ],
               })(<Input placeholder={'请输入资源名称'} />)}
@@ -254,27 +258,27 @@ class Source extends Component {
                 rules: [
                   {
                     required: false,
-                    message: "请输入资源位置",
+                    message: '请输入资源位置',
                   },
                 ],
               })(<Input placeholder={'请输入资源位置'} />)}
             </FormItem>
-            <FormItem label={'资源价值'}>
+            <FormItem label={'单价'}>
               {getFieldDecorator('sourceValue', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入资源价值",
+                    message: '请输入单价',
                   },
                 ],
-              })(<Input placeholder={'请输入资源价值'} />)}
+              })(<InputNumber precision={1} />)}
             </FormItem>
             <FormItem label={'资源数量'}>
               {getFieldDecorator('total', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入资源数量",
+                    message: '请输入资源数量',
                   },
                 ],
               })(<Input placeholder={'请输入资源数量'} />)}

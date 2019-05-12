@@ -1,40 +1,32 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
-import {
-  Form,
-  Input,
-  Select,
-  Button,
-  Card,
-  Icon,
-  InputNumber
-} from 'antd';
+import { Form, Input, Select, Button, Card, Icon, InputNumber, message } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 
-@connect(({ }) => ({}))
+@connect(({}) => ({}))
 @Form.create()
 class Coach extends PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
-      campusList: []
-    }
+      campusList: [],
+    };
   }
 
   componentDidMount() {
-    // request(api).then((res)=>{
-    //   if(res.status==0){
-    //     this.setState({
-    //       campusList:res.data
-    //     })
-    //   }
-    // });
+    let api = 'http://localhost:8080/manage/showAllCampus';
+    request(api).then(res => {
+      if (res.status == 0) {
+        this.setState({
+          campusList: res.data,
+        });
+      }
+    });
   }
 
   handleSubmit = e => {
@@ -42,20 +34,23 @@ class Coach extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        let api = 'http://localhost:8080/source/addSource';
         //TODO
         request(api, {
           method: 'POST',
-          body: values
-        }).then((res) => {
-          if(res.status=='0'){
-            message.success(res.msg);
-            this.props.form.resetFields();
-          }else{
-            message.error(res.msg);
-          }
-        }).catch(() => {
-          message.error('登记失败');
+          data: values,
         })
+          .then(res => {
+            if (res.status == '0') {
+              message.success(res.msg);
+              this.props.form.resetFields();
+            } else {
+              message.error(res.msg);
+            }
+          })
+          .catch(() => {
+            message.error('登记失败');
+          });
       }
     });
   };
@@ -93,10 +88,8 @@ class Coach extends PureComponent {
       <PageHeaderWrapper title={'物资登记'} content={''}>
         <Card bordered={false}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{ marginTop: 8 }}>
-            <FormItem
-              label={'名称'}
-            >
-              {getFieldDecorator('name', {
+            <FormItem label={'名称'}>
+              {getFieldDecorator('sourceName', {
                 rules: [
                   {
                     required: true,
@@ -105,9 +98,7 @@ class Coach extends PureComponent {
                 ],
               })(<Input placeholder={'请输入名称'} />)}
             </FormItem>
-            <FormItem
-              label={'位置'}
-            >
+            <FormItem label={'位置'}>
               {getFieldDecorator('sourcePosition', {
                 rules: [
                   {
@@ -117,9 +108,7 @@ class Coach extends PureComponent {
                 ],
               })(<Input placeholder={'请输入物资所处位置'} />)}
             </FormItem>
-            <FormItem
-              label={<FormattedMessage id="form.student.choiceCampus" />}
-            >
+            <FormItem label={<FormattedMessage id="form.student.choiceCampus" />}>
               {getFieldDecorator('campusId', {
                 rules: [
                   {
@@ -128,33 +117,29 @@ class Coach extends PureComponent {
                   },
                 ],
               })(
-                <Select placeholder='请选择校区'>
-                  {
-                    this.state.campusList.map((item) => {
-                      return (
-                        <Option value={item.id} key={item.id}>{item.name}</Option>
-                      )
-                    })
-                  }
+                <Select placeholder="请选择校区">
+                  {this.state.campusList.map(item => {
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
                 </Select>
               )}
             </FormItem>
-            <FormItem
-              label={'价格'}
-            >
+            <FormItem label={'单价（元）'}>
               {getFieldDecorator('sourceValue', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    message: '请输入单价',
                   },
                 ],
-              })(<Input placeholder={'请输入价格'} />)}
+              })(<InputNumber precision={1} />)}
             </FormItem>
 
-            <FormItem
-              label={'当前状态'}
-            >
+            <FormItem label={'当前状态'}>
               {getFieldDecorator('status', {
                 rules: [
                   {
@@ -162,14 +147,18 @@ class Coach extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Select placeholder='请选择当前状态'>
-                <Option value='0' key='0'>未使用</Option>
-                <Option value='1' key='1'>正在使用</Option>
-              </Select>)}
+              })(
+                <Select placeholder="请选择当前状态">
+                  <Option value={0} key="0">
+                    未使用
+                  </Option>
+                  <Option value={1} key="1">
+                    正在使用
+                  </Option>
+                </Select>
+              )}
             </FormItem>
-            <FormItem
-              label={'数量'}
-            >
+            <FormItem label={'数量'}>
               {getFieldDecorator('total', {
                 rules: [
                   {
@@ -177,7 +166,7 @@ class Coach extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Input placeholder='请输入物资数量' />)}
+              })(<Input placeholder="请输入物资数量" />)}
             </FormItem>
             <FormItem {...tailFormItemLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>

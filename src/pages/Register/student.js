@@ -12,7 +12,7 @@ import {
   Radio,
   Icon,
   Tooltip,
-  message
+  message,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
@@ -22,33 +22,33 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ }) => ({}))
+@connect(({}) => ({}))
 @Form.create()
 class Student extends PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
       campusList: [],
-      coachList: []
-    }
+      coachList: [],
+    };
   }
 
   componentDidMount() {
-    // request(api).then((res)=>{
-    //   if(res.status==0){
-    //     this.setState({
-    //       campusList:res.data
-    //     })
-    //   }
-    // });
-    // request(api).then((res)=>{
-    //   if(res.status==0){
-    //     this.setState({
-    //       coachLis:res.data
-    //     })
-    //   }
-    // });
+    let api = 'http://localhost:8080/manage/showAllCampus';
+    request(api).then(res => {
+      if (res.status == 0) {
+        this.setState({
+          campusList: res.data,
+        });
+      }
+    });
+    request('http://localhost:8080/manage/Coaches').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          coachList: res.data,
+        });
+      }
+    });
   }
 
   handleSubmit = e => {
@@ -56,19 +56,22 @@ class Student extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        request(api,{
-          method:'POST',
-          body:values
-        }).then((res)=>{
-          if(res.status=='0'){
-            message.success(res.msg);
-            this.props.form.resetFields();
-          }else{
-            message.error(res.msg);
-          }
-        }).catch(()=>{
-          message.error('登记失败');
+        let api = 'http://localhost:8080/manage/insertStudent';
+        request(api, {
+          method: 'POST',
+          data: values,
         })
+          .then(res => {
+            if (res.status == '0') {
+              message.success(res.msg);
+              this.props.form.resetFields();
+            } else {
+              message.error(res.msg);
+            }
+          })
+          .catch(() => {
+            message.error('登记失败');
+          });
       }
     });
   };
@@ -106,10 +109,8 @@ class Student extends PureComponent {
       <PageHeaderWrapper title={'学员登记'} content={''}>
         <Card bordered={false}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{ marginTop: 8 }}>
-            <FormItem
-              label={'姓名'}
-            >
-              {getFieldDecorator('namae', {
+            <FormItem label={'姓名'}>
+              {getFieldDecorator('name', {
                 rules: [
                   {
                     required: true,
@@ -118,8 +119,7 @@ class Student extends PureComponent {
                 ],
               })(<Input placeholder={'请输入姓名'} />)}
             </FormItem>
-            <FormItem
-              label={'性别'}>
+            <FormItem label={'性别'}>
               {getFieldDecorator('sex', {
                 rules: [
                   {
@@ -128,15 +128,13 @@ class Student extends PureComponent {
                   },
                 ],
               })(
-                <Select placeholder='请选择性别'>
+                <Select placeholder="请选择性别">
                   <Option value="男">男</Option>
                   <Option value="女">女</Option>
                 </Select>
               )}
             </FormItem>
-            <FormItem
-              label={'身份证号'}
-            >
+            <FormItem label={'身份证号'}>
               {getFieldDecorator('idcard', {
                 rules: [
                   {
@@ -146,9 +144,7 @@ class Student extends PureComponent {
                 ],
               })(<Input placeholder={'请输入身份证号'} />)}
             </FormItem>
-            <FormItem
-              label={<FormattedMessage id="form.student.phone.label" />}
-            >
+            <FormItem label={<FormattedMessage id="form.student.phone.label" />}>
               {getFieldDecorator('phone', {
                 rules: [
                   {
@@ -158,9 +154,7 @@ class Student extends PureComponent {
                 ],
               })(<Input placeholder={formatMessage({ id: 'form.student.phone.placeholder' })} />)}
             </FormItem>
-            <FormItem
-              label={<FormattedMessage id="form.student.choiceCampus" />}
-            >
+            <FormItem label={<FormattedMessage id="form.student.choiceCampus" />}>
               {getFieldDecorator('campusId', {
                 rules: [
                   {
@@ -169,35 +163,33 @@ class Student extends PureComponent {
                   },
                 ],
               })(
-                <Select placeholder='请选择校区'>
-                  {
-                    this.state.campusList.map((item) => {
-                      return (
-                        <Option value={item.id} key={item.id}>{item.name}</Option>
-                      )
-                    })
-                  }
+                <Select placeholder="请选择校区">
+                  {this.state.campusList.map(item => {
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
                 </Select>
               )}
             </FormItem>
-            <FormItem
-              label={<FormattedMessage id="form.student.choiceCoach" />}
-            >
+            <FormItem label={<FormattedMessage id="form.student.choiceCoach" />}>
               {getFieldDecorator('coachId', {
                 rules: [
                   {
-                    required: false
+                    required: false,
                   },
                 ],
               })(
-                <Select placeholder='请选择教练'>
-                  {
-                    this.state.coachList.map((item) => {
-                      return (
-                        <Option value={item.id} key={item.id}>{item.name}</Option>
-                      )
-                    })
-                  }
+                <Select placeholder="请选择教练">
+                  {this.state.coachList.map(item => {
+                    return (
+                      <Option value={item.coach.id} key={item.coach.id}>
+                        {item.coach.name}
+                      </Option>
+                    );
+                  })}
                 </Select>
               )}
             </FormItem>
