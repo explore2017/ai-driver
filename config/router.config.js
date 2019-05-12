@@ -23,132 +23,8 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     routes: [
-<<<<<<< HEAD
       // student
-      { path: '/', redirect: '/student/studentData', authority: ['admin', 'user'] },
-      {
-        path: '/student',
-        name: 'student',
-        icon: 'user',
-        routes: [
-          {
-            path: '/student/studentData',
-            name: 'data',
-            component: './Student/StudentData',
-          },
-          {
-            path: '/student/choiceCoach',
-            name: 'choiceCoach',
-            component: './Student/ChoiceCoach',
-          },
-          {
-            path: '/student/addExam',
-            name: 'addExam',
-            component: './Student/AddExam',
-          },
-          {
-            path: '/student/searchExam',
-            name: 'searchExam',
-            component: './Student/SearchExam',
-          },
-        ],
-      },
-      // coach
-      {
-        path: '/coach',
-        name: 'coach',
-        icon: 'user',
-        routes: [
-          {
-            path: '/coach/coachData',
-            name: 'data',
-            component: './Student/StudentData',
-          },
-          {
-            path: '/coach/student',
-            name: 'student',
-            component: './Manage/Student',
-          },
-        ],
-      },
-      // news
-      {
-        path: '/news',
-        name: 'news',
-        icon: 'profile',
-        routes: [
-          {
-            path: '/news/student',
-            name: 'student',
-            component: './Student/StudentData',
-          },
-          {
-            path: '/news/manage',
-            name: 'manage',
-            component: './Student/ChoiceCoach',
-          },
-          {
-            path: '/news/source',
-            name: 'source',
-            component: './Student/StudentData',
-          },
-          {
-            path: '/news/person',
-            name: 'person',
-            component: './Student/ChoiceCoach',
-          },
-        ],
-      },
-
-      // vehicle
-      {
-        path: '/vehicle/message',
-        name: 'vehicle',
-        icon: 'dashboard',
-        component: './Student/ChoiceCoach',
-      },
-      // manage
-      {
-        path: '/manage',
-        name: 'manage',
-        icon: 'table',
-        routes: [
-          {
-            path: '/manage/student',
-            name: 'student',
-            component: './Manage/Student',
-          },
-          {
-            path: '/manage/coach',
-            name: 'coach',
-            component: './Manage/Student',
-          },
-          {
-            path: '/manage/source',
-            name: 'source',
-            component: './Manage/Exam',
-          },
-          {
-            path: '/manage/campus',
-            name: 'campus',
-            component: './Manage/Vehicle',
-          },
-          {
-            path: '/manage/exam',
-            name: 'exam',
-            component: './Manage/Exam',
-          },
-          {
-            path: '/manage/vehicle',
-            name: 'vehicle',
-            component: './Manage/Vehicle',
-          },
-        ],
-      },
-
-      // dashboard
-      { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
-=======
+      { path: '/', redirect: '/index', authority: ['admin', 'user'] },
       {
         path: '/index',
         name: '首页',
@@ -178,9 +54,6 @@ export default [
           },
         ],
       },
-      // student
-      { path: '/', redirect: '/index', authority: ['admin', 'user'] },
->>>>>>> d564c9a86bf0d77701c8fa0416f32af1ba97ea3d
       {
         path: '/student',
         name: 'student',
@@ -268,7 +141,7 @@ export default [
           {
             path: '/manage/coach',
             name: 'coach',
-            component: './Manage/Coach',
+            component: './Manage/Student',
           },
           {
             path: '/manage/source',
@@ -299,6 +172,7 @@ export default [
         icon: 'dashboard',
         component: './Student/ChoiceCoach',
       },
+
       // dashboard
       // { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
       // {
