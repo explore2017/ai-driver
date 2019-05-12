@@ -29,7 +29,6 @@ class Vehicle extends Component {
       campusList: [],
       coachList:[],
       visible: false,
-
     };
   }
 
@@ -38,25 +37,24 @@ class Vehicle extends Component {
   }
 
   initialList() {
-    //  request("api").then((res)=>{
-    // 	if(res.status===0){
-    // 		this.setState({
-    // 			list:res.data
-    // 		})
-    // 	}
-    // });
+     request("http://localhost:8080/manage/showAllCampus").then((res)=>{
+    	if(res.status==0){
+    		this.setState({
+    			list:res.data
+    		})
+    	}
+    }).catch(()=>{});
   }
 
   handleDelete(record) {
     // record.id
-    request(api).then(res => {
-      if(res.status=='0'){
-        message.success(res.msg);
-      }else{
-        message.error(res.msg);
-        initialList();
-      }
-    });
+    let api="http://localhost:8080/campus/deleteCampus/"+record.id
+    request(api,{
+      method:'delete',
+    }).then(res => {
+      message.success(res.msg);
+      this.initialList();
+    }).catch(()=>{});
 
   }
 
@@ -65,11 +63,10 @@ class Vehicle extends Component {
       visible: true,
     });
     this.props.form.setFieldsValue({
+      id:record.id,
       name: record.name,
-      purchaseTime: record.purchaseTime,
-      status: record.status,
-      coach: record.coachId,
-      campusId: record.campusId,
+      position: record.position,
+      info: record.info,
     });
   }
 
@@ -79,22 +76,23 @@ class Vehicle extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         // TODO
-        request(api, {
+        request("http://localhost:8080/campus/reviseCampus", {
           method: 'PUT',
-          body: values,
+          data: values,
         })
           .then(res => {
             if(res.status=='0'){
               message.success(res.msg);
+              this.handleModalVisible();
+              this.initialList();
             }else{
               message.error(res.msg);
             }
+
           })
           .catch(() => {
             message.error('编辑失败');
           });
-        this.handleModalVisible();
-        initialList();
       }
     });
   };
@@ -122,15 +120,6 @@ class Vehicle extends Component {
       },
     };
 
-    const source = [
-      {
-        id: 1,
-        name: 'name',
-        jobNum: 'jobNum',
-        campusId: 'compusId',
-        status: 0,
-      },
-    ];
 
     const columns = [
       {
@@ -140,40 +129,19 @@ class Vehicle extends Component {
         render: (text, record, index) => `${index + 1}`,
       },
       {
-        title: '车牌号',
+        title: '校区名称',
         dataIndex: 'name',
         key: 'name',
       },
       {
-        title: '所属教练',
-        dataIndex: 'coachId',
-        key: 'coachId',
+        title: '校区信息',
+        dataIndex: 'info',
+        key: 'info',
       },
       {
-        title: '所属校区',
-        dataIndex: 'campusId',
-        key: 'campusId',
-      },
-      {
-        title: '车辆状态',
-        dataIndex: 'status',
-        key: 'status',
-        render: text => {
-          if (text == 0) {
-            return <Tag color="red">无法使用</Tag>;
-          }
-          if (text == 1) {
-            return <Tag color="green">可以使用</Tag>;
-          }
-          if (text == 2) {
-            return <Tag color="green">正在维修</Tag>;
-          }
-        },
-      },
-      {
-        title: '购买时间',
-        dataIndex: 'purchaseTime',
-        key: 'purchaseTime',
+        title: '校区位置',
+        dataIndex: 'position',
+        key: 'position',
       },
       {
         title: '操作',
@@ -202,10 +170,10 @@ class Vehicle extends Component {
         <Card>
           <Link to={'/register/vehicle'}>
             <Button type="primary" style={{ marginBottom: 20 }}>
-              车辆登记
+              校区登记
             </Button>
           </Link>
-          <Table dataSource={source} columns={columns} />
+          <Table dataSource={this.state.list} columns={columns} />
         </Card>
         <Modal
           title={'编辑'}
@@ -214,81 +182,43 @@ class Vehicle extends Component {
           footer={null}
         >
           <Form onSubmit={this.handleSubmit}>
-            <FormItem label={'车牌号'}>
+          <FormItem >
+              {getFieldDecorator('id'
+              )(<span></span>)}
+            </FormItem>
+            <FormItem label={'校区名称'}>
               {getFieldDecorator('name', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    message:"请输入校区名称",
                   },
                 ],
-              })(<Input placeholder={'请输入车牌号'} />)}
+              })(<Input placeholder={'请输入校区名称'} />)}
             </FormItem>
-            <FormItem label="所属教练">
-              {getFieldDecorator('coachId', {
+            <FormItem label="校区信息">
+              {getFieldDecorator('info', {
                 rules: [
                   {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    required: false,
+                    message: "请输入校区信息",
                   },
                 ],
               })(
-                <Select placeholder="请选择教练">
-                  {this.state.coachList.map(item => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                <Input placeholder={'请输入校区信息'} />
               )}
             </FormItem>
-            <FormItem label="所属校区">
-              {getFieldDecorator('campusId', {
+            <FormItem label="校区位置">
+              {getFieldDecorator('position', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    message: "请输入校区位置",
                   },
                 ],
               })(
-                <Select placeholder="请选择校区">
-                  {this.state.campusList.map(item => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                <Input placeholder={'请输入校区位置'} />
               )}
-            </FormItem>
-            <FormItem label="修改状态">
-              {getFieldDecorator('status', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(
-                <Select placeholder="请选择状态">
-                  <Option value={0}>无法使用</Option>
-                  <Option value={1}>可以使用</Option>
-                  <Option value={2}>正在维修</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem label="购买时间">
-              {getFieldDecorator('purchase_time', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<DatePicker />)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit">

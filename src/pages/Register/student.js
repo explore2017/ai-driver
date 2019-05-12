@@ -60,7 +60,12 @@ class Student extends PureComponent {
           method:'POST',
           body:values
         }).then((res)=>{
-          message.info(res.msg);
+          if(res.status=='0'){
+            message.success(res.msg);
+            this.props.form.resetFields();
+          }else{
+            message.error(res.msg);
+          }
         }).catch(()=>{
           message.error('登记失败');
         })
@@ -193,6 +198,21 @@ class Student extends PureComponent {
                       )
                     })
                   }
+                </Select>
+              )}
+            </FormItem>
+            <FormItem label="学员驾照状态">
+              {getFieldDecorator('status', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
+                  },
+                ],
+              })(
+                <Select defaultValue={0} placeholder="请选择状态">
+                  <Option value={0}>未拿驾照</Option>
+                  <Option value={1}>已拿驾照</Option>
                 </Select>
               )}
             </FormItem>

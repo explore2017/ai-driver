@@ -13,8 +13,8 @@ import {
   Icon,
   message,
   notification,
-  List, 
-  Avatar,  
+  List,
+  Avatar,
   Skeleton,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -49,6 +49,18 @@ class ChoiceCoach extends PureComponent {
   handleSelect = record =>{
     // record.id 
     console.log(record.coach.id)
+    // const api = "http://localhost:8080/coach";
+    // request(api).then((res) => {
+    //   this.setState({
+    //     coachList: res.data
+    //   })
+    // }).catch(() => {
+    //   message.error('请求失败');
+    // })
+  }
+
+  handleSelect = record =>{
+    // record.id
     request('api').then((res)=>{
       message.info(res.msg);
     }).catch(()=>{})

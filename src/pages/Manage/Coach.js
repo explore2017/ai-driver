@@ -23,22 +23,35 @@ export default class Coach extends Component {
   }
 
   initialList() {
-    // request("api").then((res)=>{
-    // 	if(res.status===0){
-    // 		this.setState({
-    // 			list:res.data
-    // 		})
-    // 	}
-    // });
+    let api = "http://localhost:8080/manage/Coaches";
+    request(api).then((res) => {
+      if (res.status === 0) {
+        this.setState({
+          list: res.data
+        })
+      }
+    });
+    request("http://localhost:8080/manage/showAllCampus").then((res) => {
+      if (res.status == 0) {
+        this.setState({
+          campusList: res.data
+        })
+      }
+    });
   }
 
   handleDelete(record) {
     //record.id
-    request(api).then((res) => {
-      message.info(res.msg);
-      initialList();
-    });
-    
+    let api = "http://localhost:8080/manage/deleteTeacher/" + record.coach.id
+    request(api, { method: 'delete' }).then((res) => {
+      if (res.status == "0") {
+        message.success(res.msg);
+        this.initialList();
+      } else {
+        message.info(res.msg);
+      }
+    }).catch(() => { });
+
   }
 
   handleEdit(record) {
@@ -46,11 +59,12 @@ export default class Coach extends Component {
       visible: true
     })
     this.props.form.setFieldsValue({
-      name: record.name,
-      jobNum: record.jobNum,
-      phone: record.phone,
-      email: record.email,
-      campusId: record.campusId,
+      id: record.coach.id,
+      name: record.coach.name,
+      jobNum: record.coach.jobNum,
+      phone: record.coach.phone,
+      email: record.coach.email,
+      campusId: record.campus.id,
     });
   }
 
@@ -60,16 +74,21 @@ export default class Coach extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         //TODO
-        request(api,{
-          method:'PUT',
-          body:values
-        }).then((res)=>{
-          message.info(res.msg);
-        }).catch(()=>{
+        let api = "http://localhost:8080/manage/reviseTeacher"
+        request(api, {
+          method: 'PUT',
+          data: values
+        }).then((res) => {
+          if (res.status == '0') {
+            message.success(res.msg);
+          } else {
+            message.error(res.msg);
+          }
+        }).catch(() => {
           message.error('编辑失败');
         })
         this.handleModalVisible();
-        initialList();
+        this.initialList();
       }
     });
   };
@@ -99,14 +118,6 @@ export default class Coach extends Component {
     };
 
 
-    const source = [
-      {
-        id: 1,
-        name: 'name',
-        jobNum: 'jobNum',
-        campusId: 'compusId',
-      },
-    ];
 
     const columns = [
       {
@@ -117,27 +128,27 @@ export default class Coach extends Component {
       },
       {
         title: '姓名',
-        dataIndex: 'name',
+        dataIndex: 'coach.name',
         key: 'name',
       },
       {
         title: '工号',
-        dataIndex: 'jobNum',
+        dataIndex: 'coach.jobNum',
         key: 'jobNum',
       },
       {
         title: '校区',
-        dataIndex: 'campusId',
-        key: 'campusId',
+        dataIndex: 'campus.name',
+        key: 'campusName',
       },
       {
         title: '电话',
-        dataIndex: 'phone',
+        dataIndex: 'coach.phone',
         key: 'phone',
       },
       {
         title: '邮箱',
-        dataIndex: 'email',
+        dataIndex: 'coach.email',
         key: 'email',
       },
       {
@@ -170,7 +181,7 @@ export default class Coach extends Component {
               登记
             </Button>
           </Link>
-          <Table dataSource={source} columns={columns} />
+          <Table dataSource={this.state.list} columns={columns} />
         </Card>
         <Modal
           title={'编辑'}
@@ -180,6 +191,12 @@ export default class Coach extends Component {
         >
           <Form
             onSubmit={this.handleSubmit}>
+            <FormItem
+            >
+              {getFieldDecorator('id')(
+                <span></span>
+              )}
+            </FormItem>
             <FormItem
               label={'姓名'}
             >

@@ -38,7 +38,7 @@ export default [
         icon: 'plus',
         routes: [
           {
-            path: '/register/sutdent',
+            path: '/register/student',
             name: '学员登记',
             component: './Register/student',
           },
@@ -56,54 +56,58 @@ export default [
             path: '/register/vehicle',
             name: '车辆登记',
             component: './Register/vehicle',
+          }, {
+            path: '/register/campus',
+            name: '校区登记',
+            component: './Register/campus',
           },
         ],
       },
-      {
-        path: '/student',
-        name: 'student',
-        icon: 'user',
-        routes: [
-          {
-            path: '/student/studentData',
-            name: 'data',
-            component: './Student/StudentData',
-          },
-          {
-            path: '/student/choiceCoach',
-            name: 'choiceCoach',
-            component: './Student/ChoiceCoach',
-          },
-          {
-            path: '/student/addExam',
-            name: 'addExam',
-            component: './Student/AddExam',
-          },
-          {
-            path: '/student/searchExam',
-            name: 'searchExam',
-            component: './Student/SearchExam',
-          },
-        ],
-      },
-      // coach
-      {
-        path: '/coach',
-        name: 'coach',
-        icon: 'user',
-        routes: [
-          {
-            path: '/coach/coachData',
-            name: 'data',
-            component: './Student/StudentData',
-          },
-          {
-            path: '/coach/student',
-            name: 'student',
-            component: './Manage/Student',
-          },
-        ],
-      },
+      // {
+      //   path: '/student',
+      //   name: 'student',
+      //   icon: 'user',
+      //   routes: [
+      //     {
+      //       path: '/student/studentData',
+      //       name: 'data',
+      //       component: './Student/StudentData',
+      //     },
+      //     {
+      //       path: '/student/choiceCoach',
+      //       name: 'choiceCoach',
+      //       component: './Student/ChoiceCoach',
+      //     },
+      //     {
+      //       path: '/student/addExam',
+      //       name: 'addExam',
+      //       component: './Student/AddExam',
+      //     },
+      //     {
+      //       path: '/student/searchExam',
+      //       name: 'searchExam',
+      //       component: './Student/SearchExam',
+      //     },
+      //   ],
+      // },
+      // // coach
+      // {
+      //   path: ' /coach',
+      //   name: 'coach',
+      //   icon: 'user',
+      //   routes: [
+      //     {
+      //       path: '/coach/coachData',
+      //       name: 'data',
+      //       component: './Student/StudentData',
+      //     },
+      //     {
+      //       path: '/coach/student',
+      //       name: 'student',
+      //       component: './Manage/Student',
+      //     },
+      //   ],
+      // },
       // news
       {
         path: '/news',
@@ -146,17 +150,17 @@ export default [
           {
             path: '/manage/coach',
             name: 'coach',
-            component: './Manage/Student',
+            component: './Manage/Coach',
           },
           {
             path: '/manage/source',
             name: 'source',
-            component: './Manage/Exam',
+            component: './Manage/Source',
           },
           {
             path: '/manage/campus',
             name: 'campus',
-            component: './Manage/Vehicle',
+            component: './Manage/Campus',
           },
           {
             path: '/manage/exam',

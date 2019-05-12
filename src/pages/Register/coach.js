@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   Icon,
+  message,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
@@ -22,18 +23,21 @@ class Coach extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      campusList:[]
+      campusList:[],
+
     }
   }
 
   componentDidMount() {
-    // request(api).then((res)=>{
-    //   if(res.status==0){
-    //     this.setState({
-    //       campusList:res.data
-    //     })
-    //   }
-    // });
+    let api="http://localhost:8080/manage/showAllCampus"
+    request(api).then((res)=>{
+      if(res.status==0){
+        this.setState({
+          campusList:res.data
+        })
+      }
+    });
+
   }
 
   handleSubmit = e => {
@@ -41,11 +45,17 @@ class Coach extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        let api="http://localhost:8080/manage/insertTeacher"
         request(api,{
           method:'POST',
-          body:values
+          data:values
         }).then((res)=>{
-          message.info(res.msg);
+          if(res.status=='0'){
+            message.success(res.msg);
+            this.props.form.resetFields();
+          }else{
+            message.error(res.msg);
+          }
         }).catch(()=>{
           message.error('登记失败');
         })
