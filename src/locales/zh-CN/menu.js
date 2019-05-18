@@ -69,5 +69,19 @@ export default {
   'menu.news.manage': '驾校管理制度',
   'menu.news.source': '驾校资源配置',
   'menu.news.person': '驾校人员配置',
-  // 'menu.news.exam': '驾校考试信息展示',
+
+  'menu.register': '登记',
+  'menu.register.student': '学员登记',
+  'menu.register.coach': '教练登记',
+  'menu.register.source': '物资登记',
+  'menu.register.vehicle': '车辆登记',
+  'menu.register.campus': '校区登记',
+  'menu.register.exam': '考试登记',
+
+  'menu.password': '校区登记',
+  'menu.info': '考试登记',
+  'menu.myexam': '我的考试',
+  'menu.sign': '报名考试',
+  'menu.choiceCoach': '报名考试',
+  'menu.driveNews': '驾校新闻',
 };

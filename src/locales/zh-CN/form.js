@@ -3,6 +3,7 @@ export default {
   'form.captcha.second': '秒',
   'form.optional': '（选填）',
   'form.submit': '提交',
+  'form.search': '查找',
   'form.save': '保存',
   'form.email.placeholder': '邮箱',
   'form.password.placeholder': '至少6位密码，区分大小写',
@@ -46,6 +47,7 @@ export default {
 
   'form.student.addExam': '考试名称',
   'form.student.position': '考试地点',
+  'form.student.subjectName': '考试科目',
   'form.student.examTime': '考试时间',
   'form.student.placeholder.examTime': '请选择考试时间',
   'form.student.phone.label': '电话号码',

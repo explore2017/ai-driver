@@ -1,4 +1,4 @@
-import { showSubjectStudent, queryRule, removeRule, addRule, updateRule } from '@/services/api';
+import { showSubjectStudent, showStudentExam, reviewSubjectStudent, deleteSubjectStudent, queryRule, removeRule, addRule, updateRule } from '@/services/api';
 
 export default {
   namespace: 'exam',
@@ -14,12 +14,19 @@ export default {
     *showSubjectStudent({ payload }, { call, put }) {
       const response = yield call(showSubjectStudent, payload);
       yield put({
-        type: 'save',
+        type: 'saveSubjectStudent',
         payload: response,
       });
     },
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
+    *showStudentExam({ payload }, { call, put }) {
+      const response = yield call(showStudentExam, payload);
+      yield put({
+        type: 'saveSubjectStudent',
+        payload: response,
+      });
+    },
+    *reviewSubjectStudent({ payload }, { call, put }) {
+      const response = yield call(reviewSubjectStudent, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -52,6 +59,16 @@ export default {
   },
 
   reducers: {
+    saveSubjectStudent(state, action) {
+      // console.log(action.payload.data)
+      return {
+        ...state,
+        // list:action.payload.data,
+        data:{
+          list:action.payload.data,
+        }, 
+      };
+    },
     save(state, action) {
       return {
         ...state,

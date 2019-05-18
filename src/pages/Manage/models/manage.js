@@ -1,4 +1,4 @@
-import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
+import { showSubjectStudent, queryRule, removeRule, addRule, updateRule } from '@/services/api';
 
 export default {
   namespace: 'manage',
@@ -11,6 +11,14 @@ export default {
   },
 
   effects: {
+    *showSubjectStudent({ payload }, { call, put }) {
+    console.log("sdfke")
+    const response = yield call(showSubjectStudent, payload);
+    yield put({
+      type: 'save',
+      payload: response,
+    });
+  },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryRule, payload);
       yield put({
@@ -46,9 +54,13 @@ export default {
 
   reducers: {
     save(state, action) {
+      console.log(action.payload.data)
       return {
         ...state,
-        data: action.payload,
+        list:action.payload.data,
+        // data:{
+        //   list:action.payload.data,
+        // } 
       };
     },
   },

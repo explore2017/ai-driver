@@ -17,32 +17,26 @@ export async function commonLogin(params) {
   });
 }
 
-
-export async function addSubjectStudent(params) {
-  return request(Url.addSubjectStudent, {
+export async function showSubjectStudent(params) {
+  return request(Url.showSubjectStudent, {
     method: 'POST',
     data: {
       ...params,
-      method: 'post',
     },
   });
 }
 
-export async function showSubjectStudent(params) {
-  // request(Url.showSubjectStudent, {
-  //   method: 'POST',
-  //   data: {
-  //     ...params,
-  //   },
-  // })
-  // .then(function(response) {
-  //   console.log(response);
-  //   return response;
-  // })
-  // .catch(function(error) {
-  //   console.log(error);
-  // });
-  return request(Url.showSubjectStudent, {
+export async function showStudentExam(params) {
+  return request(Url.showStudentExam, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function reviewSubjectStudent(params) {
+  return request(Url.reviewSubjectStudent, {
     method: 'POST',
     data: {
       ...params,

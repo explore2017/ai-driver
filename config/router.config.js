@@ -27,42 +27,44 @@ export default [
       { path: '/', redirect: '/index', authority: ['admin', 'student'] },
       {
         path: '/index',
-        name: '首页',
+        name: 'home',
         icon: 'home',
         component: './Index',
       },
       //info register
       {
         path: '/register',
-        name: '登记',
+        name: 'register',
         icon: 'plus',
         routes: [
           {
             path: '/register/student',
-            name: '学员登记',
+            name: 'student',
             component: './Register/student',
           },
           {
             path: '/register/coach',
-            name: '教练登记',
+            name: 'coach',
             component: './Register/coach',
           },
           {
             path: '/register/source',
-            name: '物资登记',
+            name: 'source',
             component: './Register/source',
           },
           {
             path: '/register/vehicle',
-            name: '车辆登记',
+            name: 'vehicle',
             component: './Register/vehicle',
-          }, {
-            path: '/register/campus',
-            name: '校区登记',
-            component: './Register/campus',
+          },
+          {
+            path: '/register/exam',
+            name: 'exam',
+            component: './Register/exam',
           },
         ],
       },
+
       // {
       //   path: '/student',
       //   name: 'student',
@@ -195,31 +197,31 @@ export default [
       },
       {
         path: '/learner/choiceCoach',
-        name: '选择教练',
+        name: 'choiceCoach',
         icon: 'dashboard',
         component: './Learner/choiceCoach',
       },
       {
         path: '/learner/sign',
-        name: '报名考试',
+        name: 'sign',
         icon: 'dashboard',
         component: './Learner/sign',
       },
       {
         path: '/learner/exam',
-        name: '我的考试',
+        name: 'myexam',
         icon: 'dashboard',
         component: './Learner/exam',
       },
       {
         path: '/learner/info',
-        name: '个人信息',
+        name: 'info',
         icon: 'dashboard',
         component: './Learner/info',
       },
       {
         path: '/learner/password',
-        name: '修改密码',
+        name: 'password',
         icon: 'dashboard',
         component: './Learner/password',
       },
