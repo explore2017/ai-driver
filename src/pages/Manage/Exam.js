@@ -49,36 +49,23 @@ class Exam extends Component {
   initialList() {
     const {search} = this.state;
     const { dispatch } = this.props;
-    console.log(search.searchStudentName)
-    if(search.searchStudentName == '' || search.searchStudentName != isNullOrUndefined){
-      dispatch({
-        type: 'exam/showSubjectStudent',
-      });
-    }else{
-      // dispatch({
-      //   type: 'exam/showStudentExam',
-      //   payload: search.searchStudentName,
-      // });
-      // console.log(search.searchStudentName)
-    }
+    dispatch({
+      type: 'exam/showSubjectStudent',
+    });
   }
 
   handleSearchSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      if (values.searchStudentName != '' && values.searchStudentName != isNullOrUndefined) {
-        // this.setState({
-        //   ...this.state,
-        //   search: {searchStudentName:values.searchStudentName,},
-        // })
-        const params = {name: values.searchStudentName};
+        if(values.searchStudentName == ""){
+          values.searchStudentName = null;
+        }
+        const params = {studentName: values.searchStudentName, status: values.searchStatus};
         dispatch({
           type: 'exam/showStudentExam',
           payload: params,
         });
-        console.log(params)
-      }
     });
   };
 
@@ -186,9 +173,12 @@ class Exam extends Component {
         key: 'status',
         render: text => {
           if (text == 0) {
-            return <Tag color="red">未通过</Tag>;
+            return <Tag color="red">未审核</Tag>;
           }
           if (text == 1) {
+            return <Tag color="blue">未通过</Tag>;
+          }
+          if (text == 2) {
             return <Tag color="green">已通过</Tag>;
           }
         },
@@ -220,7 +210,7 @@ class Exam extends Component {
       <Card>
         <Form onSubmit={this.handleSearchSubmit}>
           <Row>
-            <Col span={8} push={4}>
+            <Col span={8} push={2}>
             <FormItem>
               {getFieldDecorator('searchStudentName', {
                 rules: [
@@ -231,10 +221,26 @@ class Exam extends Component {
               })(<Input placeholder={'请输入学员姓名'} />)}
             </FormItem>
             </Col>
+            <Col span={8} push={4}>
+              <FormItem>
+              {getFieldDecorator('searchStatus', {
+                rules: [
+                  {
+                  },
+                ],
+              })(
+                <Select placeholder="请选择状态">
+                <Option value={0}>未审核</Option>
+                <Option value={1}>未通过</Option>
+                  <Option value={2}>已通过</Option>
+                </Select>
+              )}
+            </FormItem>
+            </Col>
             <Col span={6} push={5}>
             <FormItem>
             <Button type="primary" htmlType="submit">
-                <FormattedMessage id="form.search" />
+                <FormattedMessage id="form.filter" />
                     </Button>
                 </FormItem>
             </Col>
@@ -292,8 +298,9 @@ class Exam extends Component {
                 ],
               })(
                 <Select placeholder="请选择状态">
-                  <Option value={0}>未通过</Option>
-                  <Option value={1}>已通过</Option>
+                <Option value={0}>未审核</Option>
+                <Option value={1}>未通过</Option>
+                  <Option value={2}>已通过</Option>
                 </Select>
               )}
             </FormItem>

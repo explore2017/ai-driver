@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import {
+  Row, 
+  Col,
   Card,
   Table,
   message,
@@ -70,7 +72,28 @@ class Source extends Component {
         message.error(res.msg);
       }
     });
-  }
+  } 
+
+  handleSearchSubmit = e => {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+        const params = {campusId: values.searchCampusId, status: values.searchStatus};
+        console.log(params)
+        let api = 'http://localhost:8080/source/showSource/';
+        request(api, { method: 'Post', data: {
+          ...params,
+        }, }).then(res => {
+          if (res.status == '0') {
+            this.setState({
+              list: res.data,
+            });
+          } else {
+            message.error(res.msg);
+          }
+        });
+    });
+  };
 
   handleEdit(record) {
     this.setState({
@@ -207,6 +230,58 @@ class Source extends Component {
 
     return (
       <PageHeaderWrapper>
+        <Card>
+        <Form onSubmit={this.handleSearchSubmit}>
+          <Row>
+            <Col span={8} push={2}>
+            <FormItem>
+              {getFieldDecorator('searchCampusId', {
+                rules: [
+                  {
+                    message: '请选择校区',
+                  },
+                ],
+              })(
+                <Select placeholder="请选择校区">
+                  {this.state.campusList.map(item => {
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+            </Col>
+            <Col span={8} push={4}>
+            <FormItem>
+              {getFieldDecorator('searchStatus', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
+                  },
+                ],
+              })(
+                <Select placeholder="请选择状态">
+                  <Option value={0}>未使用</Option>
+                  <Option value={1}>正在使用</Option>
+                </Select>
+              )}
+            </FormItem>
+            </Col>
+            <Col span={6} push={5}>
+            <FormItem>
+            <Button type="primary" htmlType="submit">
+                <FormattedMessage id="form.filter" />
+                    </Button>
+                </FormItem>
+            </Col>
+          </Row>
+          </Form>
+        </Card>
+
         <Card>
           <Link to={'/register/source'}>
             <Button type="primary" style={{ marginBottom: 20 }}>
