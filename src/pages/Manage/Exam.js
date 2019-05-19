@@ -66,6 +66,7 @@ class Exam extends Component {
           type: 'exam/showStudentExam',
           payload: params,
         });
+        console.log(params)
     });
   };
 
