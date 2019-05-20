@@ -191,7 +191,7 @@ export default [
       },
       {
         path: '/learner/news',
-        name: '驾校新闻',
+        name: 'driveNews',
         icon: 'dashboard',
         component: './Index/news',
       },
@@ -217,7 +217,7 @@ export default [
         path: '/learner/info',
         name: 'info',
         icon: 'dashboard',
-        component: './Learner/info',
+        component: './Register/exam',
       },
       {
         path: '/learner/password',

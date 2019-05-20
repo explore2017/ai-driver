@@ -78,10 +78,10 @@ export default {
   'menu.register.campus': '校区登记',
   'menu.register.exam': '考试登记',
 
-  'menu.password': '校区登记',
+  'menu.password': '修改密码',
   'menu.info': '考试登记',
   'menu.myexam': '我的考试',
   'menu.sign': '报名考试',
-  'menu.choiceCoach': '报名考试',
+  'menu.choiceCoach': '选择教练',
   'menu.driveNews': '驾校新闻',
 };
