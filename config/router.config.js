@@ -114,6 +114,13 @@ export default [
       // },
       // news
       {
+        path: '/news/publish',
+        authority: ['admin'],
+        icon: 'profile',
+        name: '新闻发布',
+        component:'./News/publish'
+      },
+      {
         path: '/news',
         authority: ['admin'],
         name: 'news',
@@ -122,22 +129,22 @@ export default [
           {
             path: '/news/student',
             name: 'student',
-            component: './Student/StudentData',
+            component: './News/list',
           },
           {
             path: '/news/manage',
             name: 'manage',
-            component: './Student/ChoiceCoach',
+            component: './News/list',
           },
           {
             path: '/news/source',
             name: 'source',
-            component: './Student/StudentData',
+            component: './News/list',
           },
           {
             path: '/news/person',
             name: 'person',
-            component: './Student/ChoiceCoach',
+            component: './News/list',
           },
         ],
       },
