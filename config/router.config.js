@@ -24,9 +24,10 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       // student
-      { path: '/', redirect: '/index', authority: ['admin', 'student'] },
+      // { path: '/', redirect: '/index', authority: ['admin', 'student'] },
       {
         path: '/index',
+        authority: ['admin'],
         name: 'home',
         icon: 'home',
         component: './Index',
@@ -34,6 +35,7 @@ export default [
       //info register
       {
         path: '/register',
+        authority: ['admin'],
         name: 'register',
         icon: 'plus',
         routes: [
@@ -113,6 +115,7 @@ export default [
       // news
       {
         path: '/news',
+        authority: ['admin'],
         name: 'news',
         icon: 'profile',
         routes: [
@@ -141,6 +144,7 @@ export default [
       // manage
       {
         path: '/manage',
+        authority: ['admin'],
         name: 'manage',
         icon: 'table',
         routes: [
@@ -179,51 +183,60 @@ export default [
       // vehicle
       {
         path: '/vehicle/message',
+        authority: ['admin'],
         name: '',
         icon: 'dashboard',
         component: './Student/ChoiceCoach',
       },
       //----------------------------------学员菜单开始-----------------------------------
       {
-        path: '/split',
-        name: '---------',
-        icon: 'dashboard',
-      },
-      {
         path: '/learner/news',
+        authority: ['student'],
         name: 'driveNews',
         icon: 'dashboard',
         component: './Index/news',
       },
       {
         path: '/learner/choiceCoach',
+        authority: ['student'],
         name: 'choiceCoach',
         icon: 'dashboard',
         component: './Learner/choiceCoach',
       },
       {
         path: '/learner/sign',
+        authority: ['student'],
         name: 'sign',
         icon: 'dashboard',
         component: './Learner/sign',
       },
       {
         path: '/learner/exam',
+        authority: ['student'],
         name: 'myexam',
         icon: 'dashboard',
         component: './Learner/exam',
       },
-      {
-        path: '/learner/info',
-        name: 'info',
-        icon: 'dashboard',
-        component: './Register/exam',
-      },
+      // {
+      //   path: '/learner/info',
+      //   authority: ['student'],
+      //   name: 'info',
+      //   icon: 'dashboard',
+      //   component: './Register/exam',
+      // },
       {
         path: '/learner/password',
+        authority: ['student'],
         name: 'password',
         icon: 'dashboard',
         component: './Learner/password',
+      },
+      {
+        path: '/learner/quarter',
+        authority: ['admin'],
+        name: 'quarter',
+        icon: 'dashboard',
+        component: './Learner/quarter',
       },
       // dashboard
       // { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },

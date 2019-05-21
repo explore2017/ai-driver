@@ -84,4 +84,5 @@ export default {
   'menu.sign': '报名考试',
   'menu.choiceCoach': '选择教练',
   'menu.driveNews': '驾校新闻',
+  'menu.quarter': '季度管理',
 };
