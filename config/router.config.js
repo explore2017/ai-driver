@@ -23,8 +23,8 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     routes: [
-      // student
-      // { path: '/', redirect: '/index', authority: ['admin', 'student'] },
+      // redirect
+      { path: '/', redirect: '/redirect', authority: ['admin', 'student'], component: './Redirect/index', },
       {
         path: '/index',
         authority: ['admin'],
