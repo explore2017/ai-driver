@@ -42,6 +42,7 @@ class Vehicle extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        values.purchaseTime = values.purchaseTime.format('YYYY-MM-DD');
         let api = 'http://localhost:8080/vehicle/addVehicle';
         request(api, {
           method: 'POST',

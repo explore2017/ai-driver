@@ -24,7 +24,19 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       // redirect
-      { path: '/', redirect: '/redirect', authority: ['admin', 'student'], component: './Redirect/index', },
+      {
+        path: '/',
+        redirect: '/redirect',
+        authority: ['admin', 'student'],
+        component: './Redirect/index',
+      },
+      {
+        path: '/redirect',
+        name: 'home',
+        icon: 'home',
+        hideInMenu: true,
+        component: './Redirect/index',
+      },
       {
         path: '/index',
         authority: ['admin'],
@@ -118,7 +130,7 @@ export default [
         authority: ['admin'],
         icon: 'profile',
         name: '新闻发布',
-        component:'./News/publish'
+        component: './News/publish',
       },
       {
         path: '/news',

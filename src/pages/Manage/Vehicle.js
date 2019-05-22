@@ -81,7 +81,7 @@ class Vehicle extends Component {
     this.props.form.setFieldsValue({
       id: record.id,
       name: record.name,
-      purchaseTime: record.purchaseTime.format('YYYY-MM-DD '),
+      purchaseTime: record.purchaseTime,
       status: record.status,
       coachId: record.coachId,
       campusId: record.compusId,
