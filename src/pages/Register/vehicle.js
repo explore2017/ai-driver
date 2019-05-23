@@ -27,6 +27,8 @@ class Vehicle extends PureComponent {
           campusList: res.data,
         });
       }
+    }).catch(()=>{
+      
     });
     request('http://localhost:8080/manage/Coaches').then(res => {
       if (res.status == 0) {
@@ -34,6 +36,8 @@ class Vehicle extends PureComponent {
           coachList: res.data,
         });
       }
+    }).catch(()=>{
+      
     });
   }
 

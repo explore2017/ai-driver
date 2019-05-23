@@ -36,6 +36,8 @@ class Coach extends PureComponent {
           campusList:res.data
         })
       }
+    }).catch(()=>{
+      
     });
 
   }

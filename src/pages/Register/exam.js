@@ -27,6 +27,8 @@ class Exam extends PureComponent {
           campusList: res.data,
         });
       }
+    }).catch(()=>{
+      
     });
     let api2 = 'http://localhost:8080/manage/showAllSubject';
     request(api2).then(res => {
@@ -35,6 +37,8 @@ class Exam extends PureComponent {
           subjectList: res.data,
         });
       }
+    }).catch(()=>{
+      
     });
   }
 

@@ -13,7 +13,7 @@ export default class index extends Component {
     if (localStorage.getItem('antd-pro-authority') === '["student"]') {
       this.props.history.push('/learner/news');
     } else {
-      this.props.history.push('/manage/student');
+      this.props.history.push('/index');
     }
   }
 

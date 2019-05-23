@@ -126,11 +126,17 @@ export default [
       // },
       // news
       {
-        path: '/news/publish',
+        path: '/info/publish',
         authority: ['admin'],
         icon: 'profile',
-        name: '新闻发布',
+        name: '信息发布',
         component: './News/publish',
+      },
+      {
+        path: '/news/:type',
+        authority: ['admin'],
+        hideInMenu:'true',
+        component: './News/List',
       },
       {
         path: '/news',
@@ -139,24 +145,24 @@ export default [
         icon: 'profile',
         routes: [
           {
-            path: '/news/student',
+            path: '/news/1',
             name: 'student',
-            component: './News/list',
+            //component: './News/list',
           },
           {
-            path: '/news/manage',
+            path: '/news/2',
             name: 'manage',
-            component: './News/list',
+            //component: './News/list',
           },
           {
-            path: '/news/source',
+            path: '/news/3',
             name: 'source',
-            component: './News/list',
+            //component: './News/list',
           },
           {
-            path: '/news/person',
+            path: '/news/4',
             name: 'person',
-            component: './News/list',
+            //component: './News/list',
           },
         ],
       },

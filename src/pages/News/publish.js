@@ -30,7 +30,7 @@ class Coach extends PureComponent {
   }
 
   componentDidMount() {
-    let api="http://localhost:8080/news/allType"
+    let api="http://localhost:8080/news/searchNewType"
     request(api).then((res)=>{
       if(res.status==0){
         this.setState({
@@ -60,7 +60,7 @@ class Coach extends PureComponent {
             message.error(res.msg);
           }
         }).catch(()=>{
-          message.error('登记失败');
+          message.error('发布失败');
         })
       }
     });
@@ -96,11 +96,11 @@ class Coach extends PureComponent {
     };
 
     return (
-      <PageHeaderWrapper title={'新闻信息发布'} content={''}>
+      <PageHeaderWrapper title={'信息发布'} content={''}>
         <Card bordered={false}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit} style={{ marginTop: 8 }}>
             <FormItem
-              label={'新闻标题'}
+              label={'标题'}
             >
               {getFieldDecorator('title', {
                 rules: [
@@ -109,10 +109,10 @@ class Coach extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Input placeholder={'请输入新闻标题'} />)}
+              })(<Input placeholder={'请输入标题'} />)}
             </FormItem>
             <FormItem
-              label={'新闻类型'}
+              label={'类型'}
             >
               {getFieldDecorator('typeId', {
                 rules: [
@@ -121,7 +121,7 @@ class Coach extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Select placeholder='请选择新闻类型'>
+              })(<Select placeholder='请选择类型'>
               {
                 this.state.typeList.map((item) => {
                   return (
@@ -132,7 +132,7 @@ class Coach extends PureComponent {
             </Select>)}
             </FormItem>
             <FormItem
-              label={'新闻简介'}
+              label={'简介'}
             >
               {getFieldDecorator('info', {
                 rules: [
@@ -141,10 +141,10 @@ class Coach extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<TextArea rows={2} placeholder={'请输入新闻简介'}/>)}
+              })(<TextArea rows={2} placeholder={'请输入简介'}/>)}
             </FormItem>
             <FormItem
-              label={'新闻内容'}
+              label={'内容'}
             >
               {getFieldDecorator('content', {
                 rules: [
@@ -153,7 +153,7 @@ class Coach extends PureComponent {
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<TextArea rows={5} placeholder={'请输入新闻内容'}/>)}
+              })(<TextArea rows={5} placeholder={'请输入内容'}/>)}
             </FormItem>
             <FormItem {...tailFormItemLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>

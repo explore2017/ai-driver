@@ -46,6 +46,8 @@ class Student extends Component {
           list: res.data,
         });
       }
+    }).catch(()=>{
+
     });
     request('http://localhost:8080/manage/showAllCampus').then(res => {
       if (res.status == 0) {
@@ -53,6 +55,8 @@ class Student extends Component {
           campusList: res.data,
         });
       }
+    }).catch(()=>{
+      
     });
     request('http://localhost:8080/manage/Coaches').then(res => {
       if (res.status == 0) {
@@ -60,6 +64,8 @@ class Student extends Component {
           coachList: res.data,
         });
       }
+    }).catch(()=>{
+      
     });
   }
 
