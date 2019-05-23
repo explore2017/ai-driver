@@ -61,6 +61,7 @@ export default {
   'menu.manage.campus': '校区管理',
   'menu.manage.exam': '考试管理',
   'menu.manage.vehicle': '车辆管理',
+  'menu.manage.staff': '员工管理',
 
   'menu.vehicle': '车辆使用查询',
 
@@ -77,7 +78,7 @@ export default {
   'menu.register.vehicle': '车辆登记',
   'menu.register.campus': '校区登记',
   'menu.register.exam': '考试登记',
-
+  'menu.register.staff': '员工登记',
   'menu.password': '修改密码',
   'menu.info': '考试登记',
   'menu.myexam': '我的考试',

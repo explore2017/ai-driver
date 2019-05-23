@@ -71,14 +71,67 @@ export default [
             name: 'vehicle',
             component: './Register/vehicle',
           },
+          // {
+          //   path: '/register/exam',
+          //   name: 'exam',
+          //   component: './Register/exam',
+          // },
           {
-            path: '/register/exam',
-            name: 'exam',
-            component: './Register/exam',
+            path: '/register/campus',
+            name: 'campus',
+            component: './Register/campus',
+          },
+          {
+            path: '/register/staff',
+            name: 'staff',
+            component: './Register/staff',
           },
         ],
       },
-
+      // manage
+      {
+        path: '/manage',
+        authority: ['admin'],
+        name: 'manage',
+        icon: 'table',
+        routes: [
+          {
+            path: '/manage/student',
+            name: 'student',
+            component: './Manage/Student',
+          },
+          {
+            path: '/manage/coach',
+            name: 'coach',
+            component: './Manage/Coach',
+          },
+          {
+            path: '/manage/source',
+            name: 'source',
+            component: './Manage/Source',
+          },
+          {
+            path: '/manage/campus',
+            name: 'campus',
+            component: './Manage/Campus',
+          },
+          {
+            path: '/manage/exam',
+            name: 'exam',
+            component: './Manage/Exam',
+          },
+          {
+            path: '/manage/vehicle',
+            name: 'vehicle',
+            component: './Manage/Vehicle',
+          },
+          {
+            path: '/manage/staff',
+            name: 'staff',
+            component: './Manage/Staff',
+          },
+        ],
+      },
       // {
       //   path: '/student',
       //   name: 'student',
@@ -135,7 +188,7 @@ export default [
       {
         path: '/news/:type',
         authority: ['admin'],
-        hideInMenu:'true',
+        hideInMenu: 'true',
         component: './News/List',
       },
       {
@@ -166,45 +219,7 @@ export default [
           },
         ],
       },
-      // manage
-      {
-        path: '/manage',
-        authority: ['admin'],
-        name: 'manage',
-        icon: 'table',
-        routes: [
-          {
-            path: '/manage/student',
-            name: 'student',
-            component: './Manage/Student',
-          },
-          {
-            path: '/manage/coach',
-            name: 'coach',
-            component: './Manage/Coach',
-          },
-          {
-            path: '/manage/source',
-            name: 'source',
-            component: './Manage/Source',
-          },
-          {
-            path: '/manage/campus',
-            name: 'campus',
-            component: './Manage/Campus',
-          },
-          {
-            path: '/manage/exam',
-            name: 'exam',
-            component: './Manage/Exam',
-          },
-          {
-            path: '/manage/vehicle',
-            name: 'vehicle',
-            component: './Manage/Vehicle',
-          },
-        ],
-      },
+
       // vehicle
       {
         path: '/vehicle/message',
@@ -217,29 +232,29 @@ export default [
       {
         path: '/learner/news',
         authority: ['student'],
-        name: 'driveNews',
-        icon: 'dashboard',
+        name: '首页',
+        icon: 'container',
         component: './Index/news',
       },
       {
         path: '/learner/choiceCoach',
         authority: ['student'],
         name: 'choiceCoach',
-        icon: 'dashboard',
+        icon: 'user-add',
         component: './Learner/choiceCoach',
       },
       {
         path: '/learner/sign',
         authority: ['student'],
         name: 'sign',
-        icon: 'dashboard',
+        icon: 'form',
         component: './Learner/sign',
       },
       {
         path: '/learner/exam',
         authority: ['student'],
         name: 'myexam',
-        icon: 'dashboard',
+        icon: 'snippets',
         component: './Learner/exam',
       },
       // {
@@ -253,7 +268,7 @@ export default [
         path: '/learner/password',
         authority: ['student'],
         name: 'password',
-        icon: 'dashboard',
+        icon: 'key',
         component: './Learner/password',
       },
       {

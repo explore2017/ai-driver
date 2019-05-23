@@ -13,7 +13,8 @@ import {
   Radio,
   Icon,
   Tooltip,
-  Steps
+  Steps,
+  message
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
@@ -43,11 +44,9 @@ class Sign extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        request('http://localhost:8080/student/addSubjectStudent', {
+        request('http://localhost:8080/student/sign', {
           method: 'POST',
-          body: {
-            values
-          }
+          data:values
         }).then((res) => {
           message.info(res.msg);
           if (res.status == 0) {
