@@ -12,7 +12,7 @@ export default class Quarter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
+      quarterList: [],
       visible: false
     };
   }
@@ -22,11 +22,12 @@ export default class Quarter extends Component {
   }
 
   initialList() {
-    request('api').then((res) => {
-      if (res.status === 0) {
+    let api = 'http://localhost:8080/quarters/allQuarters';
+    request(api,{method:'GET'}).then(res => {
+      if (res.status == 0) {
         this.setState({
-          list: res.data
-        })
+          quarterList: res.data,
+        });
       }
     }).catch(() => {
     });
@@ -37,11 +38,11 @@ export default class Quarter extends Component {
       visible: true
     })
     this.props.form.setFieldsValue({
-      name: record.name,
-      jobNum: record.jobNum,
-      phone: record.phone,
-      email: record.email,
-      campusId: record.campusId,
+      id: record.id,
+      years: record.years,
+      quarters: record.quarters,
+      planNumber: record.planNumber,
+      status: record.status,
     });
   }
 
@@ -51,16 +52,18 @@ export default class Quarter extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         //TODO
+        console.log(values)
+        let api = 'http://localhost:8080/quarters/reviseQuarters';
         request(api, {
           method: 'PUT',
-          body: values
+          data: values
         }).then((res) => {
           message.info(res.msg);
         }).catch(() => {
           message.error('编辑失败');
         })
         this.handleModalVisible();
-        initialList();
+        this.initialList();
       }
     });
   };
@@ -90,50 +93,7 @@ export default class Quarter extends Component {
     };
 
 
-    const source = [
-      {
-        id: 1,
-        subjectId: '科目一',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:0
-      },
-      {
-        id: 2,
-        subjectId: '科目二',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:1
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:2
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:3
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:4
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:5
-      },
-    ];
+    const {quarterList} = this.state;
 
     const columns = [
       {
@@ -143,19 +103,32 @@ export default class Quarter extends Component {
         render: (text, record, index) => `${index + 1}`,
       },
       {
-        title: '科目',
-        dataIndex: 'subjectId',
-        key: 'subjectId',
+        title: '年份',
+        dataIndex: 'years',
+        key: 'years',
       },
       {
-        title: '考场',
-        dataIndex: 'position',
-        key: 'position',
+        title: '季度',
+        dataIndex: 'quarters',
+        key: 'quarters',
+        // render:(text)=>{
+        //   var span;
+        //   switch(text){
+        //     case 1: span = <span style={{color:'green'}}>第一季度</span>;break;
+        //     case 2: span = <span style={{color:'green'}}>第二季度</span>;break;
+        //     case 3: span = <span style={{color:'green'}}>第三季度</span>;break;
+        //     case 4: span = <span style={{color:'green'}}>第四季度</span>;break;
+        //     default:span = <span>未知状态</span>;
+        //   }
+        //   return(
+        //     span
+        //   )
+        // }
       },
       {
-        title: '开始时间',
-        dataIndex: 'startTime',
-        key: 'startTime',
+        title: '计划招生人数',
+        dataIndex: 'planNumber',
+        key: 'planNumber',
       },
       {
         title: '当前状态',
@@ -164,11 +137,8 @@ export default class Quarter extends Component {
         render:(text)=>{
           var span;
           switch(text){
-            case 0: span = <span style={{color:'orange'}}>待审核</span>;break;
-            case 1: span = <span style={{color:'green'}}>审核通过</span>;break;
-            case 2: span = <span style={{color:'red'}}>审核不通过</span>;break;
-            case 3: span = <span style={{color:'green'}}>考试通过</span>;break;
-            case 4: span = <span style={{color:'red'}}>考试不通过</span>;break;
+            case 0: span = <span style={{color:'red'}}>待修改</span>;break;
+            case 1: span = <span style={{color:'green'}}>已修改</span>;break;
             default:span = <span>未知状态</span>;
           }
           return(
@@ -197,8 +167,72 @@ export default class Quarter extends Component {
               去报名
             </Button>
           </Link>
-          <Table dataSource={source} columns={columns} />
+          <Table dataSource={quarterList} columns={columns} />
         </Card>
+        <Modal
+          title={'编辑'}
+          visible={this.state.visible}
+          onCancel={() => this.handleModalVisible()}
+          footer={null}
+        >
+          <Form onSubmit={this.handleSubmit}>
+          <FormItem >
+              {getFieldDecorator('id'
+              )(<span></span>)}
+            </FormItem>
+            <FormItem label={'年份'}>
+              {getFieldDecorator('years', {
+                rules: [
+                  {
+                    required: true,
+                    message:"请输入年份",
+                  },
+                ],
+              })(<Input placeholder={'请输入年份'} />)}
+            </FormItem>
+            <FormItem label={'季度'}>
+              {getFieldDecorator('quarters', {
+                rules: [
+                  {
+                    required: true,
+                    message:"请输入季度",
+                  },
+                ],
+              })(<Input placeholder={'请输入季度'} />)}
+            </FormItem>
+            <FormItem label="">
+              {getFieldDecorator('planNumber', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入计划招生人数",
+                  },
+                ],
+              })(
+                <Input placeholder={'请输入计划招生人数'} />
+              )}
+            </FormItem>
+            <FormItem label="状态">
+              {getFieldDecorator('status', {
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
+              })(
+                <Select placeholder="请选择状态">
+                <Option value={0}>未修改</Option>
+                <Option value={1}>已修改</Option>
+                </Select>
+              )}
+            </FormItem>
+            <FormItem style={{ marginTop: 32 }}>
+              <Button type="primary" htmlType="submit">
+                <FormattedMessage id="form.submit" />
+              </Button>
+            </FormItem>
+          </Form>
+        </Modal>
       </PageHeaderWrapper>
     );
   }
