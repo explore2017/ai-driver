@@ -5,7 +5,8 @@ export default class index extends Component {
   render() {
     return (
       <Card style={{ minHeight: 600 }}>
-        <div style={{ marginTop: 40 }}>
+        <h3 style={{textAlign:'center'}}>欢迎使用速达驾校信息管理系统</h3>
+        {/* <div style={{ marginTop: 40 }}>
           <div style={{marginBottom:20}}>
             <Row gutter={16}>
               <Col span={8}>
@@ -39,7 +40,7 @@ export default class index extends Component {
               </Col>
             </Row>
           </div>
-        </div>
+        </div> */}
       </Card>
     )
   }
