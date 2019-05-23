@@ -257,13 +257,13 @@ export default [
         icon: 'snippets',
         component: './Learner/exam',
       },
-      // {
-      //   path: '/learner/info',
-      //   authority: ['student'],
-      //   name: 'info',
-      //   icon: 'dashboard',
-      //   component: './Register/exam',
-      // },
+      {
+        path: '/learner/info',
+        authority: ['student'],
+        name: '个人信息',
+        icon: 'user',
+        component: './Learner/info',
+      },
       {
         path: '/learner/password',
         authority: ['student'],

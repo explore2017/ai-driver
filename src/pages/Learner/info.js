@@ -26,11 +26,13 @@ class Info extends PureComponent {
         name: '',
         sex: '',
         phone:''
-      }
+      },
+      coach:{name:''},
+      campus:{name:''}
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.initialValue();
   }
 
@@ -38,7 +40,9 @@ class Info extends PureComponent {
     const api = "http://localhost:8080/fetchCurrent";
     request(api).then((res) => {
       this.setState({
-        user: res.entity
+        user: res.entity,
+        coach:res.entityMore.coach,
+        campus:res.entityMore.campus
       })
     }).catch(() => { })
   }
@@ -93,7 +97,7 @@ class Info extends PureComponent {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
-    const { user } = this.state;
+    const { user,campus,coach } = this.state;
     return (
       <PageHeaderWrapper>
         <Card>
@@ -119,7 +123,13 @@ class Info extends PureComponent {
               {...formItemLayout}
               label={'驾校校区'}
             >
-              <span>{user.campusId}</span>
+              <span>{campus.name}</span>
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label={'我的教练'}
+            >
+              <span>{coach.name}</span>
             </FormItem>
             <FormItem
               {...formItemLayout}

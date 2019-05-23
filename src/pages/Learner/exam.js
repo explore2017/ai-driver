@@ -22,7 +22,8 @@ export default class Exam extends Component {
   }
 
   initialList() {
-    request('api').then((res) => {
+    const api = "http://localhost:8080/student/exam"
+    request(api).then((res) => {
       if (res.status === 0) {
         this.setState({
           list: res.data
@@ -32,16 +33,15 @@ export default class Exam extends Component {
     });
   }
 
-  handleEdit(record) {
-    this.setState({
-      visible: true
-    })
-    this.props.form.setFieldsValue({
-      name: record.name,
-      jobNum: record.jobNum,
-      phone: record.phone,
-      email: record.email,
-      campusId: record.campusId,
+  handleCancel(record) {
+    const api = "http://localhost:8080/student/exam/cancel/"+record.id
+    request(api,{
+      method:'PUT'
+    }).then((res) => {
+        this.initialList();
+        message.info(res.msg)
+    }).catch(() => {
+
     });
   }
 
@@ -89,52 +89,6 @@ export default class Exam extends Component {
       },
     };
 
-
-    const source = [
-      {
-        id: 1,
-        subjectId: '科目一',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:0
-      },
-      {
-        id: 2,
-        subjectId: '科目二',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:1
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:2
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:3
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:4
-      },
-      {
-        id: 3,
-        subjectId: '科目三',
-        startTime: '2019-05-20',
-        position:'金鸡岭考场',
-        status:5
-      },
-    ];
-
     const columns = [
       {
         title: '序号',
@@ -144,34 +98,35 @@ export default class Exam extends Component {
       },
       {
         title: '科目',
-        dataIndex: 'subjectId',
+        dataIndex: 'subject.subjectName',
         key: 'subjectId',
       },
       {
         title: '考场',
-        dataIndex: 'position',
+        dataIndex: 'subjectStudent.position',
         key: 'position',
       },
       {
         title: '开始时间',
-        dataIndex: 'startTime',
+        dataIndex: 'subjectStudent.startTime',
         key: 'startTime',
       },
       {
         title: '当前状态',
-        dataIndex: 'status',
+        dataIndex: 'subjectStudent.status',
         key: 'status',
-        render:(text)=>{
+        render: (text) => {
           var span;
-          switch(text){
-            case 0: span = <span style={{color:'orange'}}>待审核</span>;break;
-            case 1: span = <span style={{color:'green'}}>审核通过</span>;break;
-            case 2: span = <span style={{color:'red'}}>审核不通过</span>;break;
-            case 3: span = <span style={{color:'green'}}>考试通过</span>;break;
-            case 4: span = <span style={{color:'red'}}>考试不通过</span>;break;
-            default:span = <span>未知状态</span>;
+          switch (text) {
+            case 0: span = <span style={{ color: 'orange' }}>待审核</span>; break;
+            case 1: span = <span style={{ color: 'green' }}>审核通过</span>; break;
+            case 2: span = <span style={{ color: 'red' }}>审核不通过</span>; break;
+            case 3: span = <span style={{ color: 'green' }}>考试通过</span>; break;
+            case 4: span = <span style={{ color: 'red' }}>考试不通过</span>; break;
+            case 5: span = <span style={{ color: 'red' }}>已取消</span>; break;
+            default: span = <span>未知状态</span>;
           }
-          return(
+          return (
             span
           )
         }
@@ -180,11 +135,19 @@ export default class Exam extends Component {
         title: '操作',
         key: 'operator',
         render: record => {
-          return (
-            <span>
-              <a onClick={() => this.handleEdit(record)}>编辑</a>
-            </span>
-          );
+          if (record.subjectStudent.status == 0) {
+            return (
+              <span>
+                <a onClick={() => this.handleCancel(record.subjectStudent)}>取消</a>
+              </span>
+            )
+          }else{
+            return (
+              <span>
+                <a disabled>取消</a>
+              </span>
+            )
+          }
         },
       },
     ];
@@ -197,7 +160,7 @@ export default class Exam extends Component {
               去报名
             </Button>
           </Link>
-          <Table dataSource={source} columns={columns} />
+          <Table dataSource={this.state.list} columns={columns} />
         </Card>
       </PageHeaderWrapper>
     );
