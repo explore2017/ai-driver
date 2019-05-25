@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import {
+  List,
   Card,
   Table,
   message,
@@ -23,11 +24,12 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 @Form.create()
-class List extends Component {
+class NewsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [],
+      newsItem: [],
       typeList: [],
       visible: false,
       type:1
@@ -53,13 +55,34 @@ class List extends Component {
 }
 
   initialList(typeId) {
-    request("http://localhost:8080/news/allType?typeId="+typeId).then((res) => {
+    request("http://localhost:8080/news/searchType?typeId="+typeId,{
+      method:'get',
+    }).then((res) => {
       if (res.status == 0) {
         this.setState({
           list: res.data
         })
       }
     }).catch(() => { });
+  }
+
+  newsShow(record){
+    console.log(99999)
+    console.log(record)
+    this.setState({
+      visible: true,
+    });
+
+    this.setState({
+      newsItem:record
+    });
+    // this.props.form.setFieldsValue({
+    //   id: record.id,
+    //   title: record.title,
+    //   content: record.content,
+    //   info: record.info,
+    //   typeId: record.typeId,
+    // });
   }
 
   handleDelete(record) {
@@ -72,21 +95,6 @@ class List extends Component {
       this.initialList(this.state.type);
     }).catch(() => { });
 
-  }
-
-  handleEdit(record) {
-    this.setState({
-      visible: true,
-    });
-
-    console.log(record)
-    this.props.form.setFieldsValue({
-      id: record.id,
-      title: record.title,
-      content: record.content,
-      info: record.info,
-      typeId: record.typeId,
-    });
   }
 
   handleSubmit = e => {
@@ -137,6 +145,8 @@ class List extends Component {
       },
     };
 
+    const {list, newsItem} = this.state
+    console.log(list)
 
     const columns = [
       {
@@ -147,17 +157,17 @@ class List extends Component {
       },
       {
         title: '标题',
-        dataIndex: 'news.title',
-        key: 'news.title',
+        dataIndex: 'title',
+        key: 'title',
       },{
         title: '新闻类型',
-        dataIndex: 'newsType.type',
-        key: 'newsType.type',
+        dataIndex: 'type',
+        key: 'type',
       },
       {
         title: '简介',
-        dataIndex: 'news.info',
-        key: 'news.info',
+        dataIndex: 'info',
+        key: 'info',
       },
       {
         title: '操作',
@@ -180,7 +190,6 @@ class List extends Component {
         },
       },
     ];
-
     return (
       <PageHeaderWrapper>
         <Card>
@@ -189,84 +198,28 @@ class List extends Component {
               信息发布
             </Button>
           </Link>
-          <Table dataSource={this.state.list} columns={columns} />
+          <List
+            grid={{ gutter: 16, column: 4 }}
+            dataSource={list}
+            renderItem={item => (
+              <List.Item>
+                <Card onClick={this.newsShow.bind(this,item)} title={item.title}>{item.info}</Card>
+              </List.Item>
+            )}
+          />
         </Card>
         <Modal
-          title={'编辑'}
+          title={'新闻详情'}
           visible={this.state.visible}
-          onCancel={() => this.handleModalVisible()}
-          footer={null}
-        >
-          <Form onSubmit={this.handleSubmit}>
-            <FormItem
-              label={'标题'}
-            >
-              {getFieldDecorator('title', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<Input placeholder={'请输入标题'} />)}
-            </FormItem>
-            <FormItem
-              label={'类型'}
-            >
-              {getFieldDecorator('typeId', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<Select placeholder='请选择类型'>
-              {
-                this.state.typeList.map((item) => {
-                  return (
-                    <Option value={item.id} key={item.id}>{item.type}</Option>
-                  )
-                })
-              }
-            </Select>)}
-            </FormItem>
-            <FormItem
-              label={'简介'}
-            >
-              {getFieldDecorator('info', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<TextArea rows={2} placeholder={'请输入简介'}/>)}
-            </FormItem>
-            <FormItem
-              label={'内容'}
-            >
-              {getFieldDecorator('content', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<TextArea rows={5} placeholder={'请输入内容'}/>)}
-            </FormItem>
-            <FormItem >
-              {getFieldDecorator('id'
-              )(<span></span>)}
-            </FormItem>
-            <FormItem style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit">
-                <FormattedMessage id="form.submit" />
-              </Button>
-            </FormItem>
-          </Form>
+          onCancel={() => this.handleModalVisible()}>
+          <div style={{ background: '#ECECEC', padding: '30px' }}>
+            <Card title={newsItem.title} bordered={false} style={{ width: 300 }}>
+              <p>{newsItem.content}</p>
+            </Card>
+          </div>
         </Modal>
       </PageHeaderWrapper>
     );
   }
 }
-export default List;
+export default NewsList;

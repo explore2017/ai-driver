@@ -189,7 +189,7 @@ export default [
         path: '/news/:type',
         authority: ['admin'],
         hideInMenu: 'true',
-        component: './News/List',
+        component: './News/NewsList',
       },
       {
         path: '/news',

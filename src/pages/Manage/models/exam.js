@@ -27,10 +27,10 @@ export default {
     },
     *reviewSubjectStudent({ payload }, { call, put }) {
       const response = yield call(reviewSubjectStudent, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      // yield put({
+      //   type: 'save',
+      //   payload: response,
+      // });
     },
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addRule, payload);
