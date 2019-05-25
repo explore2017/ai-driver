@@ -17,43 +17,70 @@ import {
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import request from '@/utils/request';
 import { Link } from 'react-router-dom';
+
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TextArea } = Input;
 
 @Form.create()
-class Vehicle extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [],
-      campusList: [],
-      coachList: [],
+      typeList: [],
       visible: false,
+      type:1
     };
   }
 
   componentDidMount() {
-    this.initialList();
+    const typeId = this.props.match.params.type;
+    this.init(typeId);
   }
 
-  initialList() {
-    request("http://localhost:8080/manage/showAllCampus").then((res) => {
+  init(typeId){
+    this.setState({
+      type:typeId
+    })
+    this.initialList(typeId);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.type !== nextProps.match.params.type){
+      this.init(nextProps.match.params.type);
+    }
+}
+
+  initialList(typeId) {
+    request("http://localhost:8080/news/allType?typeId="+typeId).then((res) => {
       if (res.status == 0) {
         this.setState({
           list: res.data
         })
       }
     }).catch(() => { });
+
+    
+    let api="http://localhost:8080/news/searchNewType"
+    request(api).then((res)=>{
+      if(res.status==0){
+        this.setState({
+          typeList:res.data
+        })
+      }
+    }).catch(()=>{
+      
+    });
   }
 
   handleDelete(record) {
-    // record.id
-    let api = "http://localhost:8080/campus/deleteCampus/" + record.id
+    let api = "http://localhost:8080/news/deleteNews/" + record.id
     request(api, {
       method: 'delete',
     }).then(res => {
       message.success(res.msg);
-      this.initialList();
+      this.initialList(this.state.type);
     }).catch(() => { });
 
   }
@@ -62,11 +89,13 @@ class Vehicle extends Component {
     this.setState({
       visible: true,
     });
+
     this.props.form.setFieldsValue({
       id: record.id,
-      name: record.name,
-      position: record.position,
+      title: record.title,
+      content: record.content,
       info: record.info,
+      typeId: record.typeId,
     });
   }
 
@@ -75,8 +104,7 @@ class Vehicle extends Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // TODO
-        request("http://localhost:8080/campus/reviseCampus", {
+        request("http://localhost:8080/news/reviseNews", {
           method: 'PUT',
           data: values,
         })
@@ -84,11 +112,10 @@ class Vehicle extends Component {
             if (res.status == '0') {
               message.success(res.msg);
               this.handleModalVisible();
-              this.initialList();
+              this.initialList(this.state.type);
             } else {
               message.error(res.msg);
             }
-
           })
           .catch(() => {
             message.error('编辑失败');
@@ -129,19 +156,18 @@ class Vehicle extends Component {
         render: (text, record, index) => `${index + 1}`,
       },
       {
-        title: '校区名称',
-        dataIndex: 'name',
-        key: 'name',
+        title: '标题',
+        dataIndex: 'news.title',
+        key: 'news.title',
+      },{
+        title: '新闻类型',
+        dataIndex: 'newsType.type',
+        key: 'newsType.type',
       },
       {
-        title: '校区信息',
-        dataIndex: 'info',
-        key: 'info',
-      },
-      {
-        title: '校区位置',
-        dataIndex: 'position',
-        key: 'position',
+        title: '简介',
+        dataIndex: 'news.info',
+        key: 'news.info',
       },
       {
         title: '操作',
@@ -149,11 +175,11 @@ class Vehicle extends Component {
         render: record => {
           return (
             <span>
-              <a onClick={() => this.handleEdit(record)}>编辑</a>
+              <a onClick={() => this.handleEdit(record.news)}>编辑</a>
               <Divider type="vertical" />
               <Popconfirm
                 title="你确认删除吗?"
-                onConfirm={() => this.handleDelete(record)}
+                onConfirm={() => this.handleDelete(record.news)}
                 okText="Yes"
                 cancelText="No"
               >
@@ -168,9 +194,9 @@ class Vehicle extends Component {
     return (
       <PageHeaderWrapper>
         <Card>
-          <Link to={'/register/campus'}>
+          <Link to={'/info/publish'}>
             <Button type="primary" style={{ marginBottom: 20 }}>
-              校区登记
+              信息发布
             </Button>
           </Link>
           <Table dataSource={this.state.list} columns={columns} />
@@ -182,43 +208,65 @@ class Vehicle extends Component {
           footer={null}
         >
           <Form onSubmit={this.handleSubmit}>
-            <FormItem >
-              {getFieldDecorator('id'
-              )(<span></span>)}
-            </FormItem>
-            <FormItem label={'校区名称'}>
-              {getFieldDecorator('name', {
+            <FormItem
+              label={'标题'}
+            >
+              {getFieldDecorator('title', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入校区名称",
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Input placeholder={'请输入校区名称'} />)}
+              })(<Input placeholder={'请输入标题'} />)}
             </FormItem>
-            <FormItem label="校区信息">
+            <FormItem
+              label={'类型'}
+            >
+              {getFieldDecorator('typeId', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
+                  },
+                ],
+              })(<Select placeholder='请选择类型'>
+              {
+                this.state.typeList.map((item) => {
+                  return (
+                    <Option value={item.id} key={item.id}>{item.type}</Option>
+                  )
+                })
+              }
+            </Select>)}
+            </FormItem>
+            <FormItem
+              label={'简介'}
+            >
               {getFieldDecorator('info', {
                 rules: [
                   {
-                    required: false,
-                    message: "请输入校区信息",
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={'请输入校区信息'} />
-              )}
+              })(<TextArea rows={2} placeholder={'请输入简介'}/>)}
             </FormItem>
-            <FormItem label="校区位置">
-              {getFieldDecorator('position', {
+            <FormItem
+              label={'内容'}
+            >
+              {getFieldDecorator('content', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入校区位置",
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={'请输入校区位置'} />
-              )}
+              })(<TextArea rows={5} placeholder={'请输入内容'}/>)}
+            </FormItem>
+            <FormItem >
+              {getFieldDecorator('id'
+              )(<span></span>)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit">
@@ -231,4 +279,4 @@ class Vehicle extends Component {
     );
   }
 }
-export default Vehicle;
+export default List;

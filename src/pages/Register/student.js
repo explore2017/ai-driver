@@ -30,6 +30,7 @@ class Student extends PureComponent {
     this.state = {
       campusList: [],
       coachList: [],
+      quartersList:[]
     };
   }
 
@@ -48,6 +49,15 @@ class Student extends PureComponent {
       if (res.status == 0) {
         this.setState({
           coachList: res.data,
+        });
+      }
+    }).catch(()=>{
+      
+    });
+    request('http://localhost:8080/quarters/threeQuarters').then(res => {
+      if (res.status == 0) {
+        this.setState({
+          quartersList: res.data,
         });
       }
     }).catch(()=>{
@@ -191,6 +201,25 @@ class Student extends PureComponent {
                     return (
                       <Option value={item.coach.id} key={item.coach.id}>
                         {item.coach.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem label={'请选择季度'}>
+              {getFieldDecorator('quarterId', {
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
+              })(
+                <Select placeholder="请选择季度">
+                  {this.state.quartersList.map(item => {
+                    return (
+                      <Option value={item.id} key={item.id}>
+                        {item.describe}
                       </Option>
                     );
                   })}

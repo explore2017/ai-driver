@@ -30,7 +30,7 @@ class Coach extends PureComponent {
   }
 
   componentDidMount() {
-    let api="http://localhost:8080/news/allType"
+    let api="http://localhost:8080/news/searchNewType"
     request(api).then((res)=>{
       if(res.status==0){
         this.setState({

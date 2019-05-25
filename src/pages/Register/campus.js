@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
-import { Form, Input, Select, Button, Card, Icon, DatePicker,message } from 'antd';
+import { Form, Input, Select, Button, Card, Icon, DatePicker, message } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 
-@connect(({}) => ({}))
+@connect(({ }) => ({}))
 @Form.create()
 class Campus extends PureComponent {
   constructor(props) {
@@ -19,13 +19,7 @@ class Campus extends PureComponent {
   }
 
   componentDidMount() {
-    // request(api).then((res)=>{
-    //   if(res.status==0){
-    //     this.setState({
-    //       campusList:res.data
-    //     })
-    //   }
-    // });
+
   }
 
   handleSubmit = e => {
@@ -38,10 +32,10 @@ class Campus extends PureComponent {
           data: values,
         })
           .then(res => {
-            if(res.status=='0'){
+            if (res.status == '0') {
               message.success(res.msg);
               this.props.form.resetFields();
-            }else{
+            } else {
               message.error(res.msg);
             }
 
@@ -104,7 +98,7 @@ class Campus extends PureComponent {
                   },
                 ],
               })(
-             <Input.TextArea placeholder={'请输入校区描述'}/>
+                <Input.TextArea placeholder={'请输入校区描述'} />
               )}
             </FormItem>
             <FormItem label="校区位置">
@@ -116,7 +110,7 @@ class Campus extends PureComponent {
                   },
                 ],
               })(
-               <Input placeholder={'请输入校区位置'} />
+                <Input placeholder={'请输入校区位置'} />
               )}
             </FormItem>
             <FormItem {...tailFormItemLayout} style={{ marginTop: 32 }}>

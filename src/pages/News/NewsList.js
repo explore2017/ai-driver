@@ -55,7 +55,7 @@ class NewsList extends Component {
 }
 
   initialList(typeId) {
-    request("http://localhost:8080/news/searchType?typeId="+typeId,{
+    request("http://localhost:8080/news/allType?typeId="+typeId,{
       method:'get',
     }).then((res) => {
       if (res.status == 0) {

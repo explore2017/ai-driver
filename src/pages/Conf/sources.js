@@ -40,7 +40,7 @@ class Sources extends Component {
     this.initialList();
   }
 
-  initialList(typeId) {
+  initialList() {
     request("http://localhost:8080/conf/sources").then((res) => {
       if (res.status == 0) {
         this.setState({
@@ -51,30 +51,15 @@ class Sources extends Component {
 
   }
 
-  handleDelete(record) {
-    // record.id
-    let api = "http://localhost:8080/news/deleteNews/" + record.id
-    request(api, {
-      method: 'delete',
-    }).then(res => {
-      message.success(res.msg);
-      this.initialList(this.state.type);
-    }).catch(() => { });
-
-  }
-
-  handleEdit(record) {
+  handleEdit(record,campus) {
     this.setState({
       visible: true,
     });
 
-    console.log(record)
     this.props.form.setFieldsValue({
-      id: record.id,
-      title: record.title,
-      content: record.content,
-      info: record.info,
-      typeId: record.typeId,
+      code: record.code,
+      max: record.max,
+      campusId: campus.id,
     });
   }
 
@@ -83,7 +68,7 @@ class Sources extends Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        request("http://localhost:8080/news/reviseNews", {
+        request("http://localhost:8080/conf/update", {
           method: 'PUT',
           data: values,
         })
@@ -91,7 +76,7 @@ class Sources extends Component {
             if (res.status == '0') {
               message.success(res.msg);
               this.handleModalVisible();
-              this.initialList(this.state.type);
+              this.initialList();
             } else {
               message.error(res.msg);
             }
@@ -140,10 +125,10 @@ class Sources extends Component {
                       item.confVos.map(conf => {
                         return (
                           <Col span={12}>
-                            <Card>
+                            <Card actions={[<Icon onClick={()=>this.handleEdit(conf,item.campus)} type="edit" />]}>
                               <h2>{conf.desc}</h2>
-                              <p>最大限制:{conf.max}</p>
-                              <p>当前数量:{conf.current}</p>
+                              <p>最大限制: {conf.max}</p>
+                              <p>当前数量: {conf.current}</p>
                             </Card>
                           </Col>
                         )
@@ -164,63 +149,23 @@ class Sources extends Component {
         >
           <Form onSubmit={this.handleSubmit}>
             <FormItem
-              label={'标题'}
+              label={'最大限制'}
             >
-              {getFieldDecorator('title', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<Input placeholder={'请输入标题'} />)}
+            <FormItem >
+              {getFieldDecorator('campusId'
+              )(<span></span>)}
             </FormItem>
-            <FormItem
-              label={'类型'}
-            >
-              {getFieldDecorator('typeId', {
+              {getFieldDecorator('max', {
                 rules: [
                   {
                     required: true,
                     message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Select placeholder='请选择类型'>
-                {
-                  this.state.typeList.map((item) => {
-                    return (
-                      <Option value={item.id} key={item.id}>{item.type}</Option>
-                    )
-                  })
-                }
-              </Select>)}
-            </FormItem>
-            <FormItem
-              label={'简介'}
-            >
-              {getFieldDecorator('info', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<TextArea rows={2} placeholder={'请输入简介'} />)}
-            </FormItem>
-            <FormItem
-              label={'内容'}
-            >
-              {getFieldDecorator('content', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
-                  },
-                ],
-              })(<TextArea rows={5} placeholder={'请输入内容'} />)}
+              })(<Input placeholder={'请输入最大限制'} />)}
             </FormItem>
             <FormItem >
-              {getFieldDecorator('id'
+              {getFieldDecorator('code'
               )(<span></span>)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }}>
