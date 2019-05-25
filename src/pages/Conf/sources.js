@@ -13,21 +13,25 @@ import {
   Select,
   DatePicker,
   Tag,
+  List,
+  Icon,
+  Row,
+  Col
 } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import request from '@/utils/request';
-import { Link } from 'react-router-dom';
+
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TextArea } = Input;
 
 @Form.create()
-class Vehicle extends Component {
+class Sources extends Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [],
-      campusList: [],
-      coachList: [],
+      typeList: [],
       visible: false,
     };
   }
@@ -36,24 +40,25 @@ class Vehicle extends Component {
     this.initialList();
   }
 
-  initialList() {
-    request("http://localhost:8080/manage/showAllCampus").then((res) => {
+  initialList(typeId) {
+    request("http://localhost:8080/conf/sources").then((res) => {
       if (res.status == 0) {
         this.setState({
-          list: res.data
+          list: res.data.campusVos
         })
       }
     }).catch(() => { });
+
   }
 
   handleDelete(record) {
     // record.id
-    let api = "http://localhost:8080/campus/deleteCampus/" + record.id
+    let api = "http://localhost:8080/news/deleteNews/" + record.id
     request(api, {
       method: 'delete',
     }).then(res => {
       message.success(res.msg);
-      this.initialList();
+      this.initialList(this.state.type);
     }).catch(() => { });
 
   }
@@ -62,11 +67,14 @@ class Vehicle extends Component {
     this.setState({
       visible: true,
     });
+
+    console.log(record)
     this.props.form.setFieldsValue({
       id: record.id,
-      name: record.name,
-      position: record.position,
+      title: record.title,
+      content: record.content,
       info: record.info,
+      typeId: record.typeId,
     });
   }
 
@@ -75,8 +83,7 @@ class Vehicle extends Component {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // TODO
-        request("http://localhost:8080/campus/reviseCampus", {
+        request("http://localhost:8080/news/reviseNews", {
           method: 'PUT',
           data: values,
         })
@@ -84,11 +91,10 @@ class Vehicle extends Component {
             if (res.status == '0') {
               message.success(res.msg);
               this.handleModalVisible();
-              this.initialList();
+              this.initialList(this.state.type);
             } else {
               message.error(res.msg);
             }
-
           })
           .catch(() => {
             message.error('编辑失败');
@@ -121,59 +127,34 @@ class Vehicle extends Component {
     };
 
 
-    const columns = [
-      {
-        title: '序号',
-        dataIndex: 'index',
-        key: 'index',
-        render: (text, record, index) => `${index + 1}`,
-      },
-      {
-        title: '校区名称',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '校区信息',
-        dataIndex: 'info',
-        key: 'info',
-      },
-      {
-        title: '校区位置',
-        dataIndex: 'position',
-        key: 'position',
-      },
-      {
-        title: '操作',
-        key: 'operator',
-        render: record => {
-          return (
-            <span>
-              <a onClick={() => this.handleEdit(record)}>编辑</a>
-              <Divider type="vertical" />
-              <Popconfirm
-                title="你确认删除吗?"
-                onConfirm={() => this.handleDelete(record)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <a style={{ color: 'red' }}>删除</a>
-              </Popconfirm>
-            </span>
-          );
-        },
-      },
-    ];
-
     return (
       <PageHeaderWrapper>
         <Card>
-          <Link to={'/register/vehicle'}>
-            <Button type="primary" style={{ marginBottom: 20 }}>
-              校区登记
-            </Button>
-          </Link>
-          <Table dataSource={this.state.list} columns={columns} />
+          {
+            this.state.list.map(item => {
+              return (
+                <div>
+                  <Divider orientation="left">{item.campus.name}</Divider>
+                  <Row gutter={16}>
+                    {
+                      item.confVos.map(conf => {
+                        return (
+                          <Col span={12}>
+                            <Card>
+                              <h2>{conf.desc}</h2>
+                              <p>最大限制:{conf.max}</p>
+                              <p>当前数量:{conf.current}</p>
+                            </Card>
+                          </Col>
+                        )
+                      })
+                    }
+                  </Row>
+                </div>
+              )
+            })
+          }
+          <Divider />
         </Card>
         <Modal
           title={'编辑'}
@@ -182,43 +163,65 @@ class Vehicle extends Component {
           footer={null}
         >
           <Form onSubmit={this.handleSubmit}>
-            <FormItem >
-              {getFieldDecorator('id'
-              )(<span></span>)}
-            </FormItem>
-            <FormItem label={'校区名称'}>
-              {getFieldDecorator('name', {
+            <FormItem
+              label={'标题'}
+            >
+              {getFieldDecorator('title', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入校区名称",
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(<Input placeholder={'请输入校区名称'} />)}
+              })(<Input placeholder={'请输入标题'} />)}
             </FormItem>
-            <FormItem label="校区信息">
+            <FormItem
+              label={'类型'}
+            >
+              {getFieldDecorator('typeId', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
+                  },
+                ],
+              })(<Select placeholder='请选择类型'>
+                {
+                  this.state.typeList.map((item) => {
+                    return (
+                      <Option value={item.id} key={item.id}>{item.type}</Option>
+                    )
+                  })
+                }
+              </Select>)}
+            </FormItem>
+            <FormItem
+              label={'简介'}
+            >
               {getFieldDecorator('info', {
                 rules: [
                   {
-                    required: false,
-                    message: "请输入校区信息",
+                    required: true,
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={'请输入校区信息'} />
-              )}
+              })(<TextArea rows={2} placeholder={'请输入简介'} />)}
             </FormItem>
-            <FormItem label="校区位置">
-              {getFieldDecorator('position', {
+            <FormItem
+              label={'内容'}
+            >
+              {getFieldDecorator('content', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入校区位置",
+                    message: formatMessage({ id: 'validation.title.required' }),
                   },
                 ],
-              })(
-                <Input placeholder={'请输入校区位置'} />
-              )}
+              })(<TextArea rows={5} placeholder={'请输入内容'} />)}
+            </FormItem>
+            <FormItem >
+              {getFieldDecorator('id'
+              )(<span></span>)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit">
@@ -231,4 +234,4 @@ class Vehicle extends Component {
     );
   }
 }
-export default Vehicle;
+export default Sources;

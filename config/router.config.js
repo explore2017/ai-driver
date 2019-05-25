@@ -200,33 +200,32 @@ export default [
           {
             path: '/news/1',
             name: 'student',
-            //component: './News/list',
           },
           {
             path: '/news/2',
             name: 'manage',
-            //component: './News/list',
-          },
-          {
-            path: '/news/3',
-            name: 'source',
-            //component: './News/list',
-          },
-          {
-            path: '/news/4',
-            name: 'person',
-            //component: './News/list',
-          },
+          }
         ],
       },
 
-      // vehicle
+      // conf
       {
-        path: '/vehicle/message',
+        path: '/conf',
         authority: ['admin'],
-        name: '',
+        name: '驾校配置',
         icon: 'dashboard',
-        component: './Student/ChoiceCoach',
+        routes: [
+          {
+            path: '/conf/sources',
+            name: '资源配置',
+            component:'./Conf/sources'
+          },
+          {
+            path: '/conf/emp',
+            name: '人员配置',
+            component:'./Conf/emp'
+          }
+        ],
       },
       //----------------------------------学员菜单开始-----------------------------------
       {

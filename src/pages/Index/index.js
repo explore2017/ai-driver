@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Statistic, Row, Col, Button, Icon } from 'antd'
+import { Card, Statistic, Row, Col, Button, Icon, Divider } from 'antd'
 import { Link } from 'react-router-dom';
 import request from '@/utils/request';
 
@@ -27,7 +27,8 @@ export default class index extends Component {
     const {count} = this.state;
     return (
       <Card style={{ minHeight: 600 }}>
-        <div style={{ marginTop: 40 }}>
+        <div style={{ marginTop: 20 }}>
+        <Divider orientation="left">驾校一览表</Divider>
           <div style={{marginBottom:20}}>
             <Row gutter={16}>
               <Col span={8}>
