@@ -67,8 +67,6 @@ class NewsList extends Component {
   }
 
   newsShow(record){
-    console.log(99999)
-    console.log(record)
     this.setState({
       visible: true,
     });
