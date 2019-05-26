@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Card, Statistic, Row, Col, Button, Icon } from 'antd'
+import { Card, Statistic, Row, Col, Button, Icon, Divider } from 'antd'
 
 export default class index extends Component {
   render() {
     return (
       <Card style={{ minHeight: 600 }}>
+        <Divider orientation="left">驾校新闻</Divider>
         <h3 style={{textAlign:'center'}}>欢迎使用速达驾校信息管理系统</h3>
         {/* <div style={{ marginTop: 40 }}>
           <div style={{marginBottom:20}}>

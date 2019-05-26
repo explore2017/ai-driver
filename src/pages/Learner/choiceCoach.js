@@ -16,11 +16,13 @@ import {
   List,
   Avatar,
   Skeleton,
+  Popconfirm
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import request from '@/utils/request';
 import TextArea from 'antd/lib/input/TextArea';
 const FormItem = Form.Item;
+const { Meta } = Card;
 
 @Form.create()
 class ChoiceCoach extends PureComponent {
@@ -48,11 +50,11 @@ class ChoiceCoach extends PureComponent {
   }
 
 
-  handleSelect = record =>{
+  handleSelect = record => {
     const api = "http://localhost:8080/student/selectCoach";
-    request(api,{
-      method:'PUT',
-      data:record
+    request(api, {
+      method: 'PUT',
+      data: record
     }).then((res) => {
       message.info(res.msg);
       this.initialValue();
@@ -67,23 +69,33 @@ class ChoiceCoach extends PureComponent {
     return (
       <PageHeaderWrapper>
         <Card>
-        <List
-        style={{}}
-        className="demo-loadmore-list"
-        itemLayout="horizontal"
-        dataSource={this.state.coachList}
-        renderItem={item => (
-          <List.Item actions={[<a onClick={()=>this.handleSelect(item)}>选择</a>]}>
-            <Skeleton avatar title={false} loading={false} active>
-              <List.Item.Meta
-                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                title={<a href="#">{item.coach.name}</a>}
-                description={'工号:'+ item.coach.jobNum +' 电话:'+ item.coach.phone}
-              />
-            </Skeleton>
-          </List.Item>
-        )}
-      />
+          <List
+            grid={{ gutter: 16, column: 3 }}
+            dataSource={this.state.coachList}
+            renderItem={item => (
+              <List.Item>
+                <Card
+                  actions={[<Popconfirm
+                    title="确认选择该教练吗?"
+                    onConfirm={() => this.handleSelect(item)}
+                    okText="是的"
+                    cancelText="我再想想"
+                  ><Icon type="select" />
+                  </Popconfirm>]}>
+                  <Meta
+                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                    title={item.coach.name}
+                    description={
+                      <div>
+                        <p>工号:{item.coach.jobNum}</p>
+                        <p>电话:{item.coach.phone}</p>
+                      </div>
+                    }
+                  />
+                </Card>
+              </List.Item>
+            )}
+          />
         </Card>
       </PageHeaderWrapper>
     )
